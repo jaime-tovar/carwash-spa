@@ -7,8 +7,6 @@ Proyecto de Python usando pandas para el manejo de dataframes, numpy y streamlit
 - Pandas
 - Numpy
 - Streamlit
-- Matplotlib
-- Seaborn
 
 ## Instalación
 ```sh
