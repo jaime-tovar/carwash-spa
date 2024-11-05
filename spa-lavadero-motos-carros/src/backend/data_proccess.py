@@ -50,3 +50,47 @@ class Gestion_Clientes:
     def mostrar_los_clientes(self):
         return self.cliente_df.to_dict(orient="records")  # Convierte todo el DataFrame a una lista de diccionarios
 
+
+class Vehiculo:
+    def __init__(self,placa, tipo_vehiculo, marca, modelo, cilindraje, tipo):
+        self.tipo_vehiculo = tipo_vehiculo
+        self.marca = marca
+        self.modelo = modelo
+        self.cilindraje = cilindraje
+        self.tipo = tipo
+        self.placa = placa
+
+class RegistroVehiculos:
+    def __init__(self):
+        self.vehiculos = pd.DataFrame(columns=['placa', 'tipo_vehiculo', 'marca', 'modelo', 'cilindraje', 'tipo'])
+        self.archivo_csv = "vehiculos.csv"
+
+    def registrar_vehiculo(self, placa, tipo_vehiculo, marca, modelo, cilindraje, tipo):
+        
+        nuevo_vehiculo = Vehiculo(placa, tipo_vehiculo, marca, modelo, cilindraje, tipo)  
+        
+        # Crea un nuevo DataFrame con los datos del nuevo vehículo
+        nuevo_vehiculo_df = pd.DataFrame([{
+            "placa": nuevo_vehiculo.placa,
+            "tipo_vehiculo": nuevo_vehiculo.tipo_vehiculo,
+            "marca": nuevo_vehiculo.marca,
+            "modelo": nuevo_vehiculo.modelo,
+            "cilindraje": nuevo_vehiculo.cilindraje,
+            "tipo": nuevo_vehiculo.tipo
+        }])
+        
+        # Usa pd.concat() para agregar el nuevo vehículo al DataFrame existente
+        self.vehiculos = pd.concat([self.vehiculos, nuevo_vehiculo_df], ignore_index=True) 
+        
+        # Guarda el DataFrame actualizado en el archivo CSV
+        self.vehiculos.to_csv(self.archivo_csv, sep=";", index=False)
+
+    def buscar_vehiculo(self, placa):
+        vehiculo = self.vehiculos[self.vehiculos['placa'] == placa]
+        if not vehiculo.empty:
+            vehiculo.to_csv("vehiculo_encontrado.csv", sep= ";", index= False)
+            return vehiculo
+        return None
+        
+    def mostrar_todos_vehiculos(self):
+        return self.vehiculos
