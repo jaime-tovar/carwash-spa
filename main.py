@@ -46,7 +46,7 @@ def autenticar(usuario, contraseña):
 # Redirigir al archivo correspondiente según el rol
 def redirigir_menu(rol):
     if rol == "admin":
-        menu_admin = importlib.import_module("menu_admin")
+        menu_admin = importlib.import_module("src/pages/menu_admin")
         menu_admin.mostrar_menu()
     elif rol == "usuario":
         menu_usuario = importlib.import_module("menu_usuario")
@@ -112,7 +112,7 @@ if "mostrar_registro" not in st.session_state:
 if st.session_state["mostrar_registro"]:
     mostrar_registro()
 elif not st.session_state["autenticado"]:
-    st.image("src/images/logo_lavadero.jpg",)
+    #st.image("/src/images/logo_lavadero.jpg")
     login()
     if st.button("Registrarse"):
         st.session_state["mostrar_registro"] = True
