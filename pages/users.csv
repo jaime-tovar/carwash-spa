@@ -1,0 +1,4 @@
+usuario,contrasena,rol,esta_activo
+admin,admin,admin,True
+test,test,usuario,True
+test2,test2,usuario,False

@@ -23,8 +23,9 @@ def make_sidebar():
             if st.session_state.role == 'admin':
                 st.page_link("pages/principal.py", label="Principal", icon="🔒")
                 st.page_link("pages/clients.py", label="Gestión Clientes", icon="🕵️")
+                st.page_link("pages/config.py", label="Configuraciones", icon="🕵️")
                 
-            if st.session_state.role == 'user':
+            if st.session_state.role == 'usuario':
                 st.page_link("pages/principal.py", label="Principal", icon="🔒")
                 st.page_link("pages/vehicles.py", label="Gestión Vehículos", icon="🕵️")
 

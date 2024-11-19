@@ -3,6 +3,7 @@ import pandas as pd
 from time import sleep
 from navigation import make_sidebar
 from backend.util_methods import Gestion_Clientes
+from backend.sys_util_functions import validate_client_data
 
 make_sidebar()
 
@@ -14,18 +15,20 @@ def btn_agregar():
     fecha_nacimiento = st.date_input("Fecha Nacimiento")
     email = st.text_input("Correo Electrónico")
     st.write('\* Campos obligatorios')
-    if st.button("Guardar", key=3):
-        cliente = Gestion_Clientes()
-        cliente.registrar_cliente(cedula, nombre, telefono, fecha_nacimiento, email)
-        st.success("Cliente creado existosamente")
-        sleep(.5)
-        st.rerun()
-    elif st.button('Cancelar', key=4):
-        st.rerun()
+    if len(email) > 0:
+        if validate_client_data(cedula, email):
+            if st.button("Guardar", key=3):
+                cliente = Gestion_Clientes()
+                cliente.registrar_cliente(cedula, nombre, telefono, fecha_nacimiento, email)
+                st.success("Cliente creado existosamente")
+                sleep(.5)
+                st.rerun()
+            elif st.button('Cancelar', key=4):
+                st.rerun()
 
 @st.dialog("Editar cliente")
 def btn_editar(dict_values):
-    cedula = st.text_input("Cédula *", value=dict_values['cedula'])
+    cedula = st.text_input("Cédula", value=dict_values['cedula'], disabled=True)
     nombre = st.text_input("Nombre *", value=dict_values['nombre'])
     telefono = st.text_input("Teléfono *", value=dict_values['telefono'])
     fecha_nacimiento = st.date_input("Fecha Nacimiento")
@@ -83,16 +86,22 @@ event = st.dataframe(
     }
 )
 
-dict_edit_values = {
-    'id' : event.selection.rows[0]+1,
-    'nombre' : st.session_state.df.iloc[event.selection.rows].iat[0, 0],
-    'cedula' : st.session_state.df.iloc[event.selection.rows].iat[0, 1],
-    'fecha_nacimiento' : st.session_state.df.iloc[event.selection.rows].iat[0, 2],
-    'telefono' : st.session_state.df.iloc[event.selection.rows].iat[0, 3],
-    'email' : st.session_state.df.iloc[event.selection.rows].iat[0, 4],
-}
-st.write(dict_edit_values)
+try:
+    dict_edit_values = {
+        'id' : event.selection.rows[0]+1,
+        'nombre' : st.session_state.df.iloc[event.selection.rows].iat[0, 0],
+        'cedula' : st.session_state.df.iloc[event.selection.rows].iat[0, 1],
+        'fecha_nacimiento' : st.session_state.df.iloc[event.selection.rows].iat[0, 2],
+        'telefono' : st.session_state.df.iloc[event.selection.rows].iat[0, 3],
+        'email' : st.session_state.df.iloc[event.selection.rows].iat[0, 4],
+    }
+except IndexError:
+    dict_edit_values = None
+
 
 if "btn_editar" not in st.session_state:
     if right.button("Editar", key=2):
-        btn_editar(dict_edit_values)
+        if dict_edit_values is None:
+            st.toast('Primero seleccione un registro')
+        else:
+            btn_editar(dict_edit_values)

@@ -12,7 +12,7 @@ class Cliente:
 # Esta clase maneja el registro de clientes en un archivo csv   
 class Gestion_Clientes:
     def __init__(self):  # Inicializamos el archivo donde se van a guardar los datos
-        self.archivo_csv='../pruebas/data/clientes.csv'
+        self.archivo_csv='clientes.csv'
         try:
             self.cliente_df = pd.read_csv(self.archivo_csv)  # Carga los datos desde el archivo csv en un DataFrame
         except FileNotFoundError:
