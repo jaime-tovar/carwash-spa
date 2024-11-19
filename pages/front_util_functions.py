@@ -2,7 +2,7 @@ import pandas as pd
 import re
 
 def validate_user(user, password):
-    df = pd.read_csv('users.csv')
+    df = pd.read_csv('pages/data/users.csv')
     
     user_exist = df[(df['usuario'] == user) & (df['contrasena'] == password)]
 

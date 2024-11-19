@@ -1,11 +1,12 @@
 import streamlit as st
-import pandas as pd
+from datetime import datetime
 from time import sleep
 from navigation import make_sidebar
-from backend.util_methods import Gestion_Clientes
-from backend.sys_util_functions import validate_client_data
+from pages.back_util_functions import Gestion_Clientes
+from pages.front_util_functions import validate_client_data
 
 make_sidebar()
+st.session_state.df_state = False
 
 @st.dialog("Agregar nuevo cliente")
 def btn_agregar():
@@ -15,31 +16,26 @@ def btn_agregar():
     fecha_nacimiento = st.date_input("Fecha Nacimiento")
     email = st.text_input("Correo Electrónico")
     st.write('\* Campos obligatorios')
-    if len(email) > 0:
-        if validate_client_data(cedula, email):
-            if st.button("Guardar", key=3):
-                cliente = Gestion_Clientes()
-                cliente.registrar_cliente(cedula, nombre, telefono, fecha_nacimiento, email)
-                st.success("Cliente creado existosamente")
-                sleep(.5)
-                st.rerun()
-            elif st.button('Cancelar', key=4):
-                st.rerun()
+    if st.button("Guardar", key=3):
+        cliente = Gestion_Clientes()
+        cliente.registrar_cliente(cedula, nombre, telefono, fecha_nacimiento, email)
+        st.success("Cliente creado existosamente")
+        sleep(1)
+        st.rerun()
 
 @st.dialog("Editar cliente")
 def btn_editar(dict_values):
     cedula = st.text_input("Cédula", value=dict_values['cedula'], disabled=True)
     nombre = st.text_input("Nombre *", value=dict_values['nombre'])
     telefono = st.text_input("Teléfono *", value=dict_values['telefono'])
-    fecha_nacimiento = st.date_input("Fecha Nacimiento")
-    email = st.text_input("Correo Electrónico")
+    fecha_nacimiento = st.date_input("Fecha Nacimiento", value=dict_values['fecha_nacimiento'])
+    email = st.text_input("Correo Electrónico", value=dict_values['email'])
     st.write('\* Campos obligatorios')
     if st.button("Guardar", key=5):
         cliente = Gestion_Clientes()
-        cliente.editar_cliente(dict_values['id'],cedula, nombre, telefono, fecha_nacimiento, email)
-        st.success("Cliente guardado exitosamente")
-        sleep(.5)
-        st.cache_data.clear()
+        cliente.editar_cliente(dict_values['id'] ,str(cedula), nombre, telefono, fecha_nacimiento, email)
+        st.success("Se ha actualizado exitosamente datos del cliente")
+        sleep(1)
         st.rerun()
         
 st.header('Gestión de Clientes')
@@ -50,8 +46,10 @@ if "btn_agregar" not in st.session_state:
     if left.button("Agregar", key=1):
         btn_agregar()
 
-if "df" not in st.session_state:
-    st.session_state.df = pd.read_csv(filepath_or_buffer='../pruebas/data/clientes.csv', index_col='id', dtype=str)
+if not st.session_state.df_state:
+    df = Gestion_Clientes()
+    st.session_state.df = df.cargar_dataframe()
+    st.session_state.df_state = True
 
 event = st.dataframe(
     st.session_state.df,
@@ -61,27 +59,27 @@ event = st.dataframe(
     column_config={
         "id": st.column_config.TextColumn(
             "ID",
-            default="st.",
+            default="st."
             ),
         "cedula": st.column_config.TextColumn(
             "Cédula",
-            default="st.",
+            default="st."
             ),
         "nombre": st.column_config.TextColumn(
             "Nombre",
-            default="st.",
+            default="st."
             ),
         "fecha_nacimiento": st.column_config.TextColumn(
             "Fecha de Nacimiento",
-            default="st.",
+            default="st."
             ),
         "telefono": st.column_config.TextColumn(
             "Teléfono",
-            default="st.",
+            default="st."
             ),
         "email": st.column_config.TextColumn(
             "Correo Electrónico",
-            default="st.",
+            default="st."
             )  
     }
 )
@@ -90,10 +88,10 @@ try:
     dict_edit_values = {
         'id' : event.selection.rows[0]+1,
         'nombre' : st.session_state.df.iloc[event.selection.rows].iat[0, 0],
-        'cedula' : st.session_state.df.iloc[event.selection.rows].iat[0, 1],
-        'fecha_nacimiento' : st.session_state.df.iloc[event.selection.rows].iat[0, 2],
-        'telefono' : st.session_state.df.iloc[event.selection.rows].iat[0, 3],
-        'email' : st.session_state.df.iloc[event.selection.rows].iat[0, 4],
+        'cedula' : str(st.session_state.df.iloc[event.selection.rows].iat[0, 1]),
+        'fecha_nacimiento' : datetime.strptime(st.session_state.df.iloc[event.selection.rows].iat[0, 2], "%Y-%m-%d").date(),
+        'telefono' : str(st.session_state.df.iloc[event.selection.rows].iat[0, 3]),
+        'email' : st.session_state.df.iloc[event.selection.rows].iat[0, 4]
     }
 except IndexError:
     dict_edit_values = None
@@ -105,3 +103,5 @@ if "btn_editar" not in st.session_state:
             st.toast('Primero seleccione un registro')
         else:
             btn_editar(dict_edit_values)
+
+st.write(dict_edit_values)

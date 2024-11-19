@@ -1,8 +1,7 @@
 import streamlit as st
 from time import sleep
 from navigation import make_sidebar
-from backend.sys_util_functions import validate_user
-
+from pages.front_util_functions import validate_user
 #make_sidebar()
 
 st.title("Log In")
