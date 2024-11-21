@@ -38,7 +38,7 @@ def btn_editar(dict_values):
         sleep(1)
         st.rerun()
         
-st.header('Gestión de Clientes')
+st.header('Gestión de Clientes', divider = 'grey')
 
 left, middle, right = st.columns(3)
 

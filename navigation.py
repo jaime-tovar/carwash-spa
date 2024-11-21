@@ -2,6 +2,7 @@ import streamlit as st
 from time import sleep
 from streamlit.runtime.scriptrunner import get_script_run_ctx
 from streamlit.source_util import get_pages
+import os
 
 
 def get_current_page_name():
@@ -14,16 +15,19 @@ def get_current_page_name():
     return pages[ctx.page_script_hash]["page_name"]
 
 def make_sidebar():
+    ruta = "pages/data/logo.png"
+    st.logo(ruta, size='large')
     with st.sidebar:
-        st.title("💎 Diamond Corp")
+        st.image(ruta, use_column_width=False, width = 250)
+        st.title('Nombre empresa')
         st.write("")
         st.write("")
 
         if st.session_state.get("logged_in", False):
             if st.session_state.role == 'admin':
                 st.page_link("pages/principal.py", label="Principal", icon="🔒")
-                st.page_link("pages/clients.py", label="Gestión Clientes", icon="🕵️")
-                st.page_link("pages/config.py", label="Configuraciones", icon="🕵️")
+                st.page_link("pages/clients.py", label="Gestión Clientes", icon="👨🏻‍💼")
+                st.page_link("pages/config.py", label="Configuraciones", icon="🛠️")
                 
             if st.session_state.role == 'usuario':
                 st.page_link("pages/principal.py", label="Principal", icon="🔒")

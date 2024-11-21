@@ -2,10 +2,13 @@ import streamlit as st
 from time import sleep
 from navigation import make_sidebar
 from pages.front_util_functions import validate_user
+import os
 #make_sidebar()
 
-st.title("Log In")
-
+ruta = "pages/data/logo.png"
+if os.path.exists(ruta):
+    st.image(ruta, use_column_width=False, width = 250)
+st.title('Nombre Lavadero')
 st.write("Puede probar con las credenciales")
 st.write("Usuario `admin`, Contraseña `admin`")
 st.write("Usuario `test`, Contraseña `test`")
