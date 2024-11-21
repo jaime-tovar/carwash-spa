@@ -18,7 +18,7 @@ def make_sidebar():
     ruta = "pages/data/logo.png"
     st.logo(ruta, size='large')
     with st.sidebar:
-        st.image(ruta, use_column_width=False, width = 250)
+        st.image(ruta, use_container_width =False, width = 250)
         st.title('Nombre empresa')
         st.write("")
         st.write("")
@@ -31,6 +31,7 @@ def make_sidebar():
                 
             if st.session_state.role == 'usuario':
                 st.page_link("pages/principal.py", label="Principal", icon="🔒")
+                st.page_link("pages/clients.py", label="Gestión Clientes", icon="👨🏻‍💼")
                 st.page_link("pages/vehicles.py", label="Gestión Vehículos", icon="🕵️")
 
             st.write("")

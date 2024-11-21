@@ -1,16 +1,14 @@
-,Unnamed: 0.1,Unnamed: 0,nombre,cedula,fecha_nacimiento,telefono,email,id
-,nan,1,Juan Pérez López,123456789,1990-01-15,604556723,juan.perez@gmail.com,nan
-,nan,2,Maria López,987654321,1985-06-20,3007654321,maria.lopez@example.com,nan
-,nan,3,Carlos Gómez,456789123,1992-03-10,3004567890,carlos.gomez@example.com,nan
-,nan,4,Ana Torres,654321987,1995-12-05,3006543219,ana.torres@example.com,nan
-,nan,5,Luis Fernández,789123456,1988-07-22,3007891234,luis.fernandez@example.com,nan
-,nan,6,Beatriz Sánchez,321987654,1993-05-14,3003219876,beatriz.sanchez@example.com,nan
-,nan,7,José Martínez,147258369,1991-09-30,3001472583,jose.martinez@example.com,nan
-,nan,8,Elena Gutiérrez,369258147,1994-11-12,3003692581,elena.gutierrez@example.com,nan
-,nan,9,Ricardo Castillo,258369147,1996-02-25,3002583691,ricardo.castillo@example.com,nan
-,nan,10,Sofía Herrera,159357456,1987-04-18,3001593574,sofia.herrera@example.com,nan
-,nan,11,Jaime Tovar,1003079468,2024-11-13,3006488978,jaime@gmail.com,nan
-,nan,12,Diana Olivero,50999455,2014-11-19,3217761194,diana@gmail.com,nan
-,13.0,0,nan,1001362287,2024-11-19,nan,nan,nan
-14.0,0.0,nan,maicol,101342343,2024-11-19,32532452324,sernamaicol6@gmail.com,nan
-0.0,nan,nan,,1001362287,2024-11-19,,,15.0
+id,nombre,cedula,fecha_nacimiento,telefono,email
+1,Juan Pérez,123456789,1990-01-15,604556723,juan.perez@edu.co.com
+2,Maria López,987654321,1985-06-20,3007654321,maria.lopez@example.com
+3,Carlos Gómez,456789123,1992-03-10,3004567890,carlos.gomez@example.com
+4,Ana Torres,654321987,1995-12-05,3006543219,ana.torres@example.com
+5,Luis Fernández,789123456,1988-07-22,3007891234,luis.fernandez@example.com
+6,Beatriz Sánchez,321987654,1993-05-14,3003219876,beatriz.sanchez@example.com
+7,José Martínez,147258369,1991-09-30,3001472583,jose.martinez@example.com
+8,Elena Gutiérrez,369258147,1994-11-12,3003692581,elena.gutierrez@example.com
+9,Ricardo Castillo,258369147,1996-02-25,3002583691,ricardo.castillo@example.com
+10,Sofía Herrera,159357456,1987-04-18,3001593574,sofia.herrera@example.com
+11,Jaime Tovar,1003079468,2024-11-13,3006488978,jaime@gmail.com
+12,Diana Olivero,50999455,2014-11-19,3217761194,diana@gmail.com
+13,JSADJQJDN,12124123,2024-11-21,EWFWEFWE,EFQEFWEF

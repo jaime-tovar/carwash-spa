@@ -7,16 +7,12 @@ import os
 
 ruta = "pages/data/logo.png"
 if os.path.exists(ruta):
-    st.image(ruta, use_column_width=False, width = 250)
+    st.image(ruta, use_container_width=False, width = 250)
 st.title('Nombre Lavadero')
-st.write("Puede probar con las credenciales")
-st.write("Usuario `admin`, Contraseña `admin`")
-st.write("Usuario `test`, Contraseña `test`")
-
 username = st.text_input("Usuario")
 password = st.text_input("Contraseña", type="password")
 
-if st.button("Log in", type="primary"):
+if st.button("Iniciar Sesión", type="primary"):
     validacion = validate_user(username, password)
     if validacion[0]:
         st.session_state.logged_in = True

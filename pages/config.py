@@ -7,21 +7,20 @@ from PIL import Image
 
 make_sidebar()
 
-@st.dialog("Agregar nuevo cliente")
+@st.dialog("Agregar nuevo usuario")
 def btn_agregar():
     nombre_usuario = st.text_input("Nombre de Usuario *")
-    contraseña = st.text_input("Contraseña *")
-    roles = ['admin','cajero']
-    rol = st.selectbox("Rol:", roles)
-    data = pd.DataFrame ([{
+    contrasena = st.text_input("Contraseña *")
+    rol = st.selectbox("Rol:", ['admin','usuario'])
+    df = pd.DataFrame ([{
         'usuario' : nombre_usuario,
-        'contrasena' : contraseña,
+        'contrasena' : contrasena,
         'rol' : rol,
         'esta_activo' : True
     }])
     st.write('\* Campos obligatorios')
     if st.button("Guardar", key=3):
-        data.to_csv('pages/data/users.csv', index=False)
+        df.to_csv('pages/data/users.csv', index=False)
         st.success("Usuario creado existosamente")
         sleep(1)
         st.rerun()
@@ -32,7 +31,7 @@ st.subheader('Agregar Usuarios')
 left, middle, right = st.columns(3)
 
 if "btn_agregar" not in st.session_state:
-    if left.button("Agregar", key=1):
+    if left.button("Agregar", key=5):
         btn_agregar()
 
 def configurar():

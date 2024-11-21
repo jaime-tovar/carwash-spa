@@ -10,7 +10,8 @@ class Gestion_Clientes:
             self.cliente_df = pd.read_csv(self.archivo_csv, dtype=str, index_col='id')  # Carga los datos desde el archivo csv en un DataFrame
         except FileNotFoundError:
             # Si el DataFrame no existe, crea un nuevo DataFrame con las columnas dadas
-            self.cliente_df = pd.DataFrame(columns=['id','nombre','cedula','fecha_nacimiento','telefono','email'])
+            self.cliente_df = pd.DataFrame(columns=['nombre','cedula','fecha_nacimiento','telefono','email'])
+            self.cliente_df.index.name = 'id'
             
         return self.cliente_df
     
@@ -23,36 +24,39 @@ class Gestion_Clientes:
     def cargar_a_csv(self):
         self.cliente_df = self.cliente_df.astype(str)
         # Guarda el DataFrame actualizado en el archivo CSV
-        self.cliente_df.to_csv(path_or_buf=self.archivo_csv, sep=",")
+        self.cliente_df.to_csv(path_or_buf=self.archivo_csv, sep=",", index=True)
          
     def registrar_cliente(self, cedula, nombre, telefono, fecha_nacimiento=None, email=None):
-        
         self.cargar_dataframe()
         
-        # Se extrae el id maximo que haya en el dataframe para poder calcular el id siguiente
-        id_maximo = self.cliente_df.index.max() + 1
+        if self.cliente_df.empty:
+            id_maximo = 1  # Si está vacío, asignar el primer id como 1
+        else:
+            # Se extrae el id maximo que haya en el dataframe para poder calcular el id siguiente
+            id_maximo = self.cliente_df.index.astype(int).max() + 1
         
         # Crea un nuevo DataFrame con los datos del nuevo cliente
         nuevo_cliente_df = pd.DataFrame([{
-            "id": id_maximo,
             "nombre": nombre,
             "cedula": cedula,
             "telefono": telefono,
             "fecha_nacimiento": fecha_nacimiento,
             "email": email
-        }])
+        }], index=[id_maximo])
         
-        # Usa pd.concat() para agregar el nuevo cliente al DataFrame existente
-        self.cliente_df = pd.concat([self.cliente_df, nuevo_cliente_df], ignore_index=False)
+        nuevo_cliente_df.index.name = 'id'
+        
+        self.cliente_df = pd.concat([self.cliente_df, nuevo_cliente_df])
         
         self.cargar_a_csv()
         
     def editar_cliente(self, id, cedula, nombre, telefono, fecha_nacimiento=None, email=None):
         self.cargar_dataframe()
         self.cliente_df = self.cliente_df.astype(str)
-        if cedula in self.cliente_df["cedula"].values:
-            self.cliente_df.loc[self.cliente_df["cedula"] == cedula, ["nombre", "telefono", "fecha_nacimiento", "email"]] = [nombre, telefono, fecha_nacimiento, email]
-        
+        if id in self.cliente_df.index:
+            self.cliente_df.loc[id, ['cedula', 'nombre', 'telefono', 'fecha_nacimiento', 'email']] = [
+                cedula, nombre, telefono, fecha_nacimiento, email
+            ]
         self.cargar_a_csv()
 
 class Vehiculo:

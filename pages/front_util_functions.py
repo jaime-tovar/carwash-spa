@@ -8,7 +8,7 @@ def validate_user(user, password):
 
     if not user_exist.empty:
         if user_exist['esta_activo'].iloc[0] == True:
-            return True, user_exist['rol'].iloc[0], 'Inicio de Sesió Exitoso'
+            return True, user_exist['rol'].iloc[0], 'Inicio de Sesión Exitoso'
         else:
             return False, None,f"Acceso Denegado. El usuario \'{user}\' se encuentra inactivo, comuníquese con el administrador para mas detalles."
     else:
