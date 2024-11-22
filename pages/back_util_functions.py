@@ -117,62 +117,7 @@ class Gestion_Vehiculos:
                 placa, tipo_vehiculo, marca, modelo, cilindraje, tipo
             ]
         self.cargar_a_csv()
-'''
-class Vehiculo:
-    def __init__(self,placa, tipo_vehiculo, marca, modelo, cilindraje, tipo):
-        self.tipo_vehiculo = tipo_vehiculo
-        self.marca = marca
-        self.modelo = modelo
-        self.cilindraje = cilindraje
-        self.placa = placa
-        self.tipo = tipo
 
-class RegistroVehiculos:
-
-    def __init__(self):
-        self.vehiculos = pd.DataFrame(columns=['placa', 'tipo_vehiculo', 'marca', 'modelo', 'cilindraje','tipo'])
-        self.archivo_csv = "pages/data/vehicles.csv"
-    
-    def cargar_dataframe(self):
-        try:
-            self.vehiculos_df = pd.read_csv(self.archivo_csv, dtype=str, index_col='id')  # Carga los datos desde el archivo csv en un DataFrame
-        except FileNotFoundError:
-            # Si el DataFrame no existe, crea un nuevo DataFrame con las columnas dadas
-            self.vehiculos_df = pd.DataFrame(columns=['placa', 'tipo_vehiculo', 'marca', 'modelo', 'cilindraje','tipo'])
-            self.vehiculos_df.index.name = 'id'
-            
-        return self.vehiculos_df
-
-    def registrar_vehiculo(self, placa, tipo_vehiculo, marca, modelo, cilindraje, tipo):
-        
-        nuevo_vehiculo = Vehiculo(placa, tipo_vehiculo, marca, modelo, cilindraje, tipo)  
-        
-        # Crea un nuevo DataFrame con los datos del nuevo vehículo
-        nuevo_vehiculo_df = pd.DataFrame([{
-            "placa": nuevo_vehiculo.placa,
-            "tipo_vehiculo": nuevo_vehiculo.tipo_vehiculo,
-            "marca": nuevo_vehiculo.marca,
-            "modelo": nuevo_vehiculo.modelo,
-            "cilindraje": nuevo_vehiculo.cilindraje,
-            "tipo" : nuevo_vehiculo.tipo
-        }])
-        
-        # Usa pd.concat() para agregar el nuevo vehículo al DataFrame existente
-        self.vehiculos = pd.concat([self.vehiculos, nuevo_vehiculo_df], ignore_index=True) 
-        
-        # Guarda el DataFrame actualizado en el archivo CSV
-        self.vehiculos.to_csv(self.archivo_csv, sep=";", index=False)
-
-    def buscar_vehiculo(self, placa):
-        vehiculo = self.vehiculos[self.vehiculos['placa'] == placa]
-        if not vehiculo.empty:
-            vehiculo.to_csv("vehiculo_encontrado.csv", sep= ";", index= False)
-            return vehiculo
-        return None
-        
-    def mostrar_todos_vehiculos(self):
-        return self.vehiculos
-'''
 class Gestion_Usuarios:
     def __init__(self):  # Inicializamos el archivo donde se van a guardar los datos
         self.archivo_csv='pages/data/users.csv'
@@ -186,6 +131,11 @@ class Gestion_Usuarios:
             self.usuario_df.index.name = 'id'
             
         return self.usuario_df
+    
+    def cargar_a_csv(self):
+        self.usuario_df = self.usuario_df.astype(str)
+        # Guarda el DataFrame actualizado en el archivo CSV
+        self.usuario_df.to_csv(path_or_buf=self.archivo_csv, sep=",", index=True)
     
     def registrar_usuario(self, usuario, contrasena, rol, esta_activo = True):
         self.cargar_dataframe()
@@ -209,8 +159,3 @@ class Gestion_Usuarios:
         self.usuario_df = pd.concat([self.usuario_df, nuevo_usuario_df])
         
         self.cargar_a_csv()
-    
-    def cargar_a_csv(self):
-        self.usuario_df = self.usuario_df.astype(str)
-        # Guarda el DataFrame actualizado en el archivo CSV
-        self.usuario_df.to_csv(path_or_buf=self.archivo_csv, sep=",", index=True)

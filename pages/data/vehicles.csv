@@ -1,1 +1,21 @@
-placa;tipo_vehiculo;marca;modelo;cilindraje;tipo
+id,categoria,tipo
+1,Moto,Naked
+2,Moto,Enduro
+3,Moto,Touring
+4,Moto,Cruiser
+5,Moto,Sport
+6,Moto,Scooters
+7,Moto,Trial
+8,Moto,Motocross
+9,Auto,Sedán
+10,Auto,Hatchback
+11,Auto,SUV
+12,Auto,Convertible
+13,Auto,Deportivo
+14,Auto,Roadster
+15,Auto,Familiar
+16,Camioneta,Pickup
+17,Camioneta,SUV
+18,Camioneta,Doble Cabina
+19,Quad/ATV,Cuatrimotos
+20,Quad/ATV,UTV
