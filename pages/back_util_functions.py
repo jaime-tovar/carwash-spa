@@ -59,19 +59,89 @@ class Gestion_Clientes:
             ]
         self.cargar_a_csv()
 
+class Gestion_Vehiculos:
+    def __init__(self):  # Inicializamos el archivo donde se van a guardar los datos
+        self.archivo_csv='pages/data/vehicles.csv'
+    
+    def cargar_dataframe(self):
+        try:
+            self.vehiculo_df = pd.read_csv(self.archivo_csv, dtype=str, index_col='id')  # Carga los datos desde el archivo csv en un DataFrame
+        except FileNotFoundError:
+            # Si el DataFrame no existe, crea un nuevo DataFrame con las columnas dadas
+            self.vehiculo_df = pd.DataFrame(columns=['placa', 'tipo_vehiculo', 'marca', 'modelo', 'cilindraje','tipo'])
+            self.vehiculo_df.index.name = 'id'
+            
+        return self.vehiculo_df
+    
+    def existe_vehiculo(self, cedula):
+        cliente = self.vehiculo_df[self.vehiculo_df["placa"] == cedula]
+        if not cliente.empty: # Verifica si el cliente existe 
+            return True
+        return False
+    
+    def cargar_a_csv(self):
+        self.vehiculo_df = self.vehiculo_df.astype(str)
+        # Guarda el DataFrame actualizado en el archivo CSV
+        self.vehiculo_df.to_csv(path_or_buf=self.archivo_csv, sep=",", index=True)
+         
+    def registrar_vehiculo(self, placa, tipo_vehiculo, marca, modelo, cilindraje, tipo):
+        self.cargar_dataframe()
+        
+        if self.vehiculo_df.empty:
+            id_maximo = 1  # Si está vacío, asignar el primer id como 1
+        else:
+            # Se extrae el id maximo que haya en el dataframe para poder calcular el id siguiente
+            id_maximo = self.vehiculo_df.index.astype(int).max() + 1
+        
+        # Crea un nuevo DataFrame con los datos del nuevo cliente
+        nuevo_cliente_df = pd.DataFrame([{
+            "placa": placa,
+            "tipo_vehiculo": tipo_vehiculo ,
+            "marca": marca,
+            "modelo": modelo,
+            "cilindraje": cilindraje,
+            "tipo" : tipo
+        }], index=[id_maximo])
+        
+        nuevo_cliente_df.index.name = 'id'
+        
+        self.vehiculo_df = pd.concat([self.vehiculo_df, nuevo_cliente_df])
+        
+        self.cargar_a_csv()
+        
+    def editar_vehiculo(self, id, placa, tipo_vehiculo, marca, modelo, cilindraje, tipo):
+        self.cargar_dataframe()
+        self.vehiculo_df = self.vehiculo_df.astype(str)
+        if id in self.vehiculo_df.index:
+            self.vehiculo_df.loc[id, ['placa', 'tipo_vehiculo', 'marca', 'modelo', 'cilindraje', 'tipo']] = [
+                placa, tipo_vehiculo, marca, modelo, cilindraje, tipo
+            ]
+        self.cargar_a_csv()
+'''
 class Vehiculo:
     def __init__(self,placa, tipo_vehiculo, marca, modelo, cilindraje, tipo):
         self.tipo_vehiculo = tipo_vehiculo
         self.marca = marca
         self.modelo = modelo
         self.cilindraje = cilindraje
-        self.tipo = tipo
         self.placa = placa
+        self.tipo = tipo
 
 class RegistroVehiculos:
+
     def __init__(self):
-        self.vehiculos = pd.DataFrame(columns=['placa', 'tipo_vehiculo', 'marca', 'modelo', 'cilindraje', 'tipo'])
-        self.archivo_csv = "vehiculos.csv"
+        self.vehiculos = pd.DataFrame(columns=['placa', 'tipo_vehiculo', 'marca', 'modelo', 'cilindraje','tipo'])
+        self.archivo_csv = "pages/data/vehicles.csv"
+    
+    def cargar_dataframe(self):
+        try:
+            self.vehiculos_df = pd.read_csv(self.archivo_csv, dtype=str, index_col='id')  # Carga los datos desde el archivo csv en un DataFrame
+        except FileNotFoundError:
+            # Si el DataFrame no existe, crea un nuevo DataFrame con las columnas dadas
+            self.vehiculos_df = pd.DataFrame(columns=['placa', 'tipo_vehiculo', 'marca', 'modelo', 'cilindraje','tipo'])
+            self.vehiculos_df.index.name = 'id'
+            
+        return self.vehiculos_df
 
     def registrar_vehiculo(self, placa, tipo_vehiculo, marca, modelo, cilindraje, tipo):
         
@@ -84,7 +154,7 @@ class RegistroVehiculos:
             "marca": nuevo_vehiculo.marca,
             "modelo": nuevo_vehiculo.modelo,
             "cilindraje": nuevo_vehiculo.cilindraje,
-            "tipo": nuevo_vehiculo.tipo
+            "tipo" : nuevo_vehiculo.tipo
         }])
         
         # Usa pd.concat() para agregar el nuevo vehículo al DataFrame existente
@@ -102,7 +172,7 @@ class RegistroVehiculos:
         
     def mostrar_todos_vehiculos(self):
         return self.vehiculos
-
+'''
 class Gestion_Usuarios:
     def __init__(self):  # Inicializamos el archivo donde se van a guardar los datos
         self.archivo_csv='pages/data/users.csv'
