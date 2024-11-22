@@ -1,2 +1,3 @@
-usuario,contrasena,rol,esta_activo
-admin,admin,admin,True
+id,usuario,contrasena,rol,esta_activo
+1.0,admin,admin,admin,True
+2.0,test,test,cajero,True

@@ -104,4 +104,4 @@ if "btn_editar" not in st.session_state:
         else:
             btn_editar(dict_edit_values)
 
-st.write(dict_edit_values)
+#st.write(dict_edit_values)

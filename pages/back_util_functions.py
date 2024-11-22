@@ -102,3 +102,45 @@ class RegistroVehiculos:
         
     def mostrar_todos_vehiculos(self):
         return self.vehiculos
+
+class Gestion_Usuarios:
+    def __init__(self):  # Inicializamos el archivo donde se van a guardar los datos
+        self.archivo_csv='pages/data/users.csv'
+    
+    def cargar_dataframe(self):
+        try:
+            self.usuario_df = pd.read_csv(self.archivo_csv, dtype=str, index_col='id')  # Carga los datos desde el archivo csv en un DataFrame
+        except FileNotFoundError:
+            # Si el DataFrame no existe, crea un nuevo DataFrame con las columnas dadas
+            self.usuario_df = pd.DataFrame(columns=['usuario','contrasena','rol','esta_activo'])
+            self.usuario_df.index.name = 'id'
+            
+        return self.usuario_df
+    
+    def registrar_usuario(self, usuario, contrasena, rol, esta_activo = True):
+        self.cargar_dataframe()
+        
+        if self.usuario_df.empty:
+            id_maximo = 1  # Si está vacío, asignar el primer id como 1
+        else:
+            # Se extrae el id maximo que haya en el dataframe para poder calcular el id siguiente
+            id_maximo = self.usuario_df.index.astype(int).max() + 1
+        
+        # Crea un nuevo DataFrame con los datos del nuevo cliente
+        nuevo_usuario_df = pd.DataFrame([{
+            "usuario": usuario,
+            "contrasena": contrasena,
+            "rol": rol,
+            "esta_activo": esta_activo,
+        }], index=[id_maximo])
+        
+        nuevo_usuario_df.index.name = 'id'
+        
+        self.usuario_df = pd.concat([self.usuario_df, nuevo_usuario_df])
+        
+        self.cargar_a_csv()
+    
+    def cargar_a_csv(self):
+        self.usuario_df = self.usuario_df.astype(str)
+        # Guarda el DataFrame actualizado en el archivo CSV
+        self.usuario_df.to_csv(path_or_buf=self.archivo_csv, sep=",", index=True)

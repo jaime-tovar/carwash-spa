@@ -1,5 +1,5 @@
 id,nombre,cedula,fecha_nacimiento,telefono,email
-1,Juan Pérez,123456789,1990-01-15,604556723,juan.perez@edu.co.com
+1,Juan ,123456789,1990-01-15,604556723,juan.perez@edu.co.com
 2,Maria López,987654321,1985-06-20,3007654321,maria.lopez@example.com
 3,Carlos Gómez,456789123,1992-03-10,3004567890,carlos.gomez@example.com
 4,Ana Torres,654321987,1995-12-05,3006543219,ana.torres@example.com
@@ -12,3 +12,4 @@ id,nombre,cedula,fecha_nacimiento,telefono,email
 11,Jaime Tovar,1003079468,2024-11-13,3006488978,jaime@gmail.com
 12,Diana Olivero,50999455,2014-11-19,3217761194,diana@gmail.com
 13,JSADJQJDN,12124123,2024-11-21,EWFWEFWE,EFQEFWEF
+14,Maicol,1001362287,2015-06-09,2346353432,sernamaicol6@gmail.com
