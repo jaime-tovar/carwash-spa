@@ -12,8 +12,8 @@ st.session_state.df_state = False
 @st.dialog("Agregar nuevo usuario")
 def btn_agregar():
     nombre_usuario = st.text_input("Nombre de Usuario *")
-    contrasena = st.text_input("Contraseña *")
-    rol = st.selectbox("Rol:", ['admin', 'cajero'])
+    contrasena = st.text_input("Contraseña *", type="password")
+    rol = st.selectbox("Rol:", ['admin', 'usuario'])
     if st.button("Guardar", key=3):
         usuario = Gestion_Usuarios()
         usuario.registrar_usuario(nombre_usuario,contrasena,rol)
@@ -23,7 +23,7 @@ def btn_agregar():
 
 @st.dialog("Cambiar estado de usuario")
 def btn_cambiar_estado(dict_values):
-    st.write(f"Cambiar estado del usuario: {dict_values['usuario']}")
+    st.write(f"El usuario **{dict_values['usuario']}** se encuentra ")
     if st.button("Cambiar Estado", key=6):
         cambiar_estado_usuario(dict_values['index'])
         st.success("Estado del usuario cambiado exitosamente")

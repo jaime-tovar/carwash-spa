@@ -6,19 +6,19 @@ from time import sleep
 make_sidebar()
 st.session_state.df_state = False
 
-@st.dialog("Agregar nuevo cliente")
+@st.dialog("Agregar nuevo vehículo")
 def btn_agregar():
     placa = st.text_input("Placa *")
-    tipo_vehiculo = st.selectbox("Tipo de Vehiculo:", ['Moto','Carro'])
-    marca = st.text_input("Marca")
+    tipo_vehiculo = st.selectbox("Tipo de Vehiculo *", ['Moto','Carro'])
+    marca = st.text_input("Marca *")
     modelo = st.text_input("Modelo *")
-    cilindraje = st.text_input("Cilindraje")
+    cilindraje = st.text_input("Cilindraje *")
     tipo = st.selectbox('Tipo:', ['Sport', 'Naked', 'Camioneta', 'Automovil', 'Touring'])
     st.write('\* Campos obligatorios')
     if st.button("Guardar", key=3):
-        cliente = Gestion_Vehiculos()
-        cliente.registrar_vehiculo(placa, tipo_vehiculo, marca, modelo, cilindraje, tipo)
-        st.success("Cliente creado existosamente")
+        vehiculo = Gestion_Vehiculos()
+        vehiculo.registrar_vehiculo(placa, tipo_vehiculo, marca, modelo, cilindraje, tipo)
+        st.success("Vehículo creado existosamente")
         sleep(1)
         st.rerun()
 
@@ -49,8 +49,8 @@ event = st.dataframe(
             "Placa",
             default="st."
             ),
-        "tipo_vehiculo": st.column_config.TextColumn(
-            "Tipo de Vehiculo",
+        "categoria": st.column_config.TextColumn(
+            "Categoria",
             default="st."
             ),
         "marca": st.column_config.TextColumn(
@@ -61,8 +61,8 @@ event = st.dataframe(
             "Modelo",
             default="st."
             ),
-        "cilindraje": st.column_config.TextColumn(
-            "Cilindraje",
+        "cilindrada": st.column_config.TextColumn(
+            "Cilindrada",
             default="st."
             ),
         "tipo": st.column_config.TextColumn(

@@ -1,21 +1,21 @@
-id,categoria,tipo
-1,Moto,Naked
-2,Moto,Enduro
-3,Moto,Touring
-4,Moto,Cruiser
-5,Moto,Sport
-6,Moto,Scooters
-7,Moto,Trial
-8,Moto,Motocross
-9,Auto,Sedán
-10,Auto,Hatchback
-11,Auto,SUV
-12,Auto,Convertible
-13,Auto,Deportivo
-14,Auto,Roadster
-15,Auto,Familiar
-16,Camioneta,Pickup
-17,Camioneta,SUV
-18,Camioneta,Doble Cabina
-19,Quad/ATV,Cuatrimotos
-20,Quad/ATV,UTV
+id,placa,categoria,marca,modelo,cilindrada,tipo
+1,ABC123,Moto,Yamaha,YZF-R3,321cc,Sport
+2,DEF456,Moto,Honda,CB500F,471cc,Naked
+3,GHI789,Moto,KTM,390 Adventure,373cc,Enduro
+4,JKL012,Moto,Suzuki,V-Strom 650,645cc,Touring
+5,MNO345,Moto,Harley-Davidson,Street 750,749cc,Cruiser
+6,PQR678,Moto,Vespa,GTS 300,278cc,Scooters
+7,STU901,Moto,GasGas,TXT 300,300cc,Trial
+8,VWX234,Moto,Yamaha,YZ250F,250cc,Motocross
+9,YZA567,Auto,Toyota,Corolla,1798cc,Sedán
+10,BCD890,Auto,Volkswagen,Golf,1498cc,Hatchback
+11,EFG123,Auto,Jeep,Grand Cherokee,3604cc,SUV
+12,HIJ456,Auto,BMW,4 Series,1998cc,Convertible
+13,KLM789,Auto,Porsche,911,2981cc,Deportivo
+14,NOP012,Auto,Mazda,MX-5,1998cc,Roadster
+15,QRS345,Auto,Honda,Odyssey,3471cc,Familiar
+16,TUV678,Camioneta,Ford,F-150,5000cc,Pickup
+17,WXY901,Camioneta,Chevrolet,Tahoe,5328cc,SUV
+18,ZAB234,Camioneta,Toyota,Hilux,2393cc,Doble Cabina
+19,CDE567,Quad/ATV,Can-Am,Outlander 450,427cc,Cuatrimotos
+20,FGH890,Quad/ATV,Polaris,RZR 570,567cc,UTV

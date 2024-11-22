@@ -18,7 +18,7 @@ def make_sidebar():
     ruta = "pages/data/logo.png"
     st.logo(ruta, size='large')
     with st.sidebar:
-        st.image(ruta, use_column_width =True, width = 250)
+        st.image(ruta, use_container_width  =True, width = 250)
         st.title('Nombre empresa')
         st.write("")
         st.write("")

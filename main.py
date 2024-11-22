@@ -7,7 +7,7 @@ import os
 
 ruta = "pages/data/logo.png"
 if os.path.exists(ruta):
-    st.image(ruta, use_column_width=False, width = 250)
+    st.image(ruta, use_container_width =False, width = 250)
 st.title('Nombre Lavadero')
 username = st.text_input("Usuario")
 password = st.text_input("Contraseña", type="password")
