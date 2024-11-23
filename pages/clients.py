@@ -4,28 +4,50 @@ from dateutil.relativedelta import relativedelta
 from time import sleep
 from navigation import make_sidebar
 from pages.back_util_functions import Gestion_Clientes
-from pages.front_util_functions import validate_client_data, validar_numero_celular
+from pages.front_util_functions import validate_email, validate_cedula, validate_celular
 
 make_sidebar()
 st.session_state.df_state = False
+st.session_state.validaciones_data = True
 
 @st.dialog("Agregar nuevo cliente")
 def btn_agregar():
     cedula = st.text_input("Cédula *")
+    if cedula:
+        if not validate_cedula(cedula):
+            st.error("La cédula no es válida")
+            st.session_state.validaciones_data = False
+        else:
+            st.session_state.validaciones_data = True
+    
     nombre = st.text_input("Nombre *")
     telefono = st.text_input("Celular / Teléfono *")
     if telefono:
-        if not validar_numero_celular(telefono):
+        if not validate_celular(telefono):
             st.error("Número de cellular inválido")
+            st.session_state.validaciones_data = False
+        else:
+            st.session_state.validaciones_data = True
+    
     fecha_nacimiento = st.date_input("Fecha Nacimiento", max_value= datetime.today(), min_value= datetime.today() - relativedelta(years=34) )
     email = st.text_input("Correo Electrónico")
+    if email:
+        if not validate_email(email):
+            st.error("El correo no es válido")
+            st.session_state.validaciones_data = False
+        else:
+            st.session_state.validaciones_data = True
+    
     st.write('\* Campos obligatorios')
     if st.button("Guardar", key=3):
-        cliente = Gestion_Clientes()
-        cliente.registrar_cliente(cedula, nombre, telefono, fecha_nacimiento, email)
-        st.success("Cliente creado existosamente")
-        sleep(1)
-        st.rerun()
+        if st.session_state.validaciones_data:
+            cliente = Gestion_Clientes()
+            cliente.registrar_cliente(cedula, nombre, telefono, fecha_nacimiento, email)
+            st.success("Cliente creado existosamente")
+            sleep(1)
+            st.rerun()
+        else:
+            st.error('Datos incorrectos')
 
 @st.dialog("Editar cliente")
 def btn_editar(dict_values):

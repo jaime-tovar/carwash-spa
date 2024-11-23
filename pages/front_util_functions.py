@@ -14,7 +14,7 @@ def validate_user(user, password):
     else:
         return False, None, f'Acceso Denegado. Usuario o contraseña incorrectos'
 
-def is_valid_email(email):
+def validate_email(email):
     # Se define un patrón por expresión regular para validar el correo
     pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})*$'
     
@@ -24,18 +24,13 @@ def is_valid_email(email):
     else:
         return False
     
-def validate_client_data(cedula, correo):
-    try:
-        cedula = int(cedula)
-    except TypeError:
-        return 'Recuerde que cédula debe ser un número'
+def validate_cedula(cedula):
+    # Validar que la cédula sea un número y tenga máximo 10 dígitos
+    if not re.fullmatch(r'^\d{1,10}$', cedula):
+        return False
+    return True
     
-    if not is_valid_email(correo):
-        return 'Formato de correo o válido'
-    else:
-        return True
-    
-def validar_numero_celular(numero):
+def validate_celular(numero):
     if len(numero) == 10 and numero.isdigit():
         if int(numero[0]) == 3 or int(numero[0]) == 6:
             return True
