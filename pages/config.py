@@ -5,6 +5,8 @@ import pandas as pd
 import os
 from PIL import Image
 from pages.back_util_functions import Gestion_Usuarios
+import json
+
 
 make_sidebar()
 st.session_state.df_state = False
@@ -79,12 +81,32 @@ if "btn_cambiar_estado" not in st.session_state:
 
 def configurar():
     archivo_subido = st.file_uploader("Sube tu archivo PNG o JPG", type=["png", "jpg", "jpeg"])
-
+    ruta_json = 'pages/data/nombre_empresa.json'
     if archivo_subido is not None:
         imagen = Image.open(archivo_subido)
         nombre_predeterminado = "logo.png"
         ruta_guardado = os.path.join("pages/data", nombre_predeterminado)
         imagen.save(ruta_guardado)
+    
+    nombre = st.text_input("Nombre del Lavadero")
+    try:
+        if os.path.exists(ruta_json) and os.path.getsize(ruta_json) > 0:
+            with open(ruta_json, 'r') as file:
+                data = json.load(file)
+        else:
+            data = {}
+            st.warning("El archivo JSON no existe o está vacío. Se creará uno nuevo.")
+        if nombre:
+            data['nombre'] = nombre
+            with open(ruta_json, 'w') as file:
+                json.dump(data, file, indent=4)
+            st.success("Nombre del Lavadero actualizado exitosamente.")
+        else:
+            st.info("Por favor, introduce un nombre para el lavadero.")
+    except json.JSONDecodeError as e:
+        st.error(f"Error al leer el archivo JSON: {e}")
+    except Exception as e:
+        st.error(f"Error inesperado: {e}")
 
     if st.button('Refrescar'):
         st.rerun()

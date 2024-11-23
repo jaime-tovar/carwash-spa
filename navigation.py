@@ -3,6 +3,7 @@ from time import sleep
 from streamlit.runtime.scriptrunner import get_script_run_ctx
 from streamlit.source_util import get_pages
 import os
+import json
 
 
 def get_current_page_name():
@@ -15,11 +16,15 @@ def get_current_page_name():
     return pages[ctx.page_script_hash]["page_name"]
 
 def make_sidebar():
+    ruta_json = 'pages/data/nombre_empresa.json'
     ruta = "pages/data/logo.png"
+    with open(ruta_json, 'r') as file:
+        data = json.load(file)
+    nombre_empresa = data['nombre']
     st.logo(ruta, size='large')
     with st.sidebar:
-        st.image(ruta, use_container_width  =True, width = 250)
-        st.title('Nombre empresa')
+        st.image(ruta, use_column_width=True, width = 250)
+        st.title(nombre_empresa)
         st.write("")
         st.write("")
 
