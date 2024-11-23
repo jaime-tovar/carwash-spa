@@ -13,8 +13,7 @@ servicios = {
 
 df_servicios = pd.DataFrame(servicios)
 
-st.header("Pagina Principal")
-st.subheader("Adicionar Servicios", divider='grey')
+st.header("Crear Servicios")
 st.write("")
 
 df_clientes = pd.read_csv('pages/data/clientes.csv')
@@ -27,11 +26,9 @@ opciones1 = nombres
 opciones2 = placas
 
 with left:
-    seleccion_cliente = st.selectbox("Selecciona un Cliente:", opciones1,  key="selectbox_1")
+    seleccion_vehiculo = st.selectbox("Vehículo (Placa):", opciones2,  key="selectbox_2")
 with right:
-    seleccion_vehiculo = st.selectbox("Selecciona un Vehiculo:", opciones2,  key="selectbox_2")
-
-st.write(f"Opción seleccionada: {seleccion_cliente}")
+    seleccion_cliente = st.selectbox("Cliente (Cédula | Nombre):", opciones1,  key="selectbox_1")
 
 seleccion_servicios = st.multiselect("Selecciona los servicios", df_servicios['Servicio'])
 servicios_seleccionados = df_servicios[df_servicios['Servicio'].isin(seleccion_servicios)]

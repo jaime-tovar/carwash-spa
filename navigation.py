@@ -5,7 +5,6 @@ from streamlit.source_util import get_pages
 import os
 import json
 
-
 def get_current_page_name():
     ctx = get_script_run_ctx()
     if ctx is None:
@@ -23,16 +22,15 @@ def make_sidebar():
     nombre_empresa = data['nombre']
     st.logo(ruta, size='large')
     with st.sidebar:
-        st.image(ruta, use_column_width=True, width = 250)
+        st.image(ruta, use_container_width=False, width = 100)
         st.title(nombre_empresa)
-        st.write("")
-        st.write("")
 
         if st.session_state.get("logged_in", False):
             if st.session_state.role == 'admin':
                 st.page_link("pages/principal.py", label="Principal", icon="🏠")
                 st.page_link("pages/clients.py", label="Gestión Clientes", icon="👨🏻‍💼")
                 st.page_link("pages/vehicles.py", label="Gestión Vehículos", icon="🚘")
+                st.page_link("pages/reports.py", label="Reportes", icon="📋")
                 st.page_link("pages/config.py", label="Configuraciones", icon="🛠️")
 
             if st.session_state.role == 'cajero':
@@ -43,17 +41,15 @@ def make_sidebar():
             st.write("")
             st.write("")
 
-            if st.button("Cerrar Sesion"):
+            if st.button("Cerrar Sesión"):
                 logout()
 
         elif get_current_page_name() != "main":
-            # If anyone tries to access a secret page without being logged in,
-            # redirect them to the login page
             st.switch_page("main.py")
 
 
 def logout():
     st.session_state.logged_in = False
-    st.info("Logged out successfully!")
+    st.info("Cerrando sesión...")
     sleep(0.5)
     st.switch_page("main.py")

@@ -38,7 +38,7 @@ def btn_editar(dict_values):
         sleep(1)
         st.rerun()
         
-st.header('Gestión de Clientes', divider = 'grey')
+st.header('Gestión de Clientes')
 
 left, middle, right = st.columns(3)
 
@@ -81,7 +81,8 @@ event = st.dataframe(
             "Correo Electrónico",
             default="st."
             )  
-    }
+    },
+    height= 300
 )
 
 try:
