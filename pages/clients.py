@@ -1,9 +1,10 @@
 import streamlit as st
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
 from time import sleep
 from navigation import make_sidebar
 from pages.back_util_functions import Gestion_Clientes
-from pages.front_util_functions import validate_client_data
+from pages.front_util_functions import validate_client_data, validar_numero_celular
 
 make_sidebar()
 st.session_state.df_state = False
@@ -12,8 +13,11 @@ st.session_state.df_state = False
 def btn_agregar():
     cedula = st.text_input("Cédula *")
     nombre = st.text_input("Nombre *")
-    telefono = st.text_input("Teléfono *")
-    fecha_nacimiento = st.date_input("Fecha Nacimiento")
+    telefono = st.text_input("Celular / Teléfono *")
+    if telefono:
+        if not validar_numero_celular(telefono):
+            st.error("Número de cellular inválido")
+    fecha_nacimiento = st.date_input("Fecha Nacimiento", max_value= datetime.today(), min_value= datetime.today() - relativedelta(years=34) )
     email = st.text_input("Correo Electrónico")
     st.write('\* Campos obligatorios')
     if st.button("Guardar", key=3):

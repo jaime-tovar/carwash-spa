@@ -35,3 +35,9 @@ def validate_client_data(cedula, correo):
     else:
         return True
     
+def validar_numero_celular(numero):
+    if len(numero) == 10 and numero.isdigit():
+        if int(numero[0]) == 3 or int(numero[0]) == 6:
+            return True
+    return False
+    
