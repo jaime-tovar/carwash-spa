@@ -14,5 +14,5 @@ pip install -r requirements.txt
 
 ## Ejecutar Aplicación
 ```sh
-pyhton -m streamlit run main.py
+python -m streamlit run main.py
 ```
