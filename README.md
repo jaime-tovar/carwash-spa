@@ -10,7 +10,9 @@ Proyecto de Python usando pandas para el manejo de dataframes, numpy y streamlit
 ## Instalación
 ```sh
 pip install -r requirements.txt
+```
 
 ## Ejecutar Aplicación
 ```sh
 pyhton -m streamlit run main.py
+```
