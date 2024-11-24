@@ -3,12 +3,14 @@ import streamlit as st
 from pages.back_util_functions import Gestion_Vehiculos
 from time import sleep
 
+
+
 make_sidebar()
 st.session_state.df_state = False
 
 @st.dialog("Agregar nuevo vehículo")
 def btn_agregar():
-    placa = st.text_input("Placa *")
+    placa = st.text_input("Placa *")                        
     tipo_vehiculo = st.selectbox("Tipo de Vehiculo *", ['Moto','Carro'])
     marca = st.text_input("Marca *")
     modelo = st.text_input("Modelo *")

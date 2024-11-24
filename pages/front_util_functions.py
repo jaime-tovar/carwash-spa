@@ -35,4 +35,4 @@ def validate_celular(numero):
         if int(numero[0]) == 3 or int(numero[0]) == 6:
             return True
     return False
-    
+

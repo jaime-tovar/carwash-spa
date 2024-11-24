@@ -73,11 +73,12 @@ class Gestion_Vehiculos:
             
         return self.vehiculo_df
     
-    def existe_vehiculo(self, cedula):
-        cliente = self.vehiculo_df[self.vehiculo_df["placa"] == cedula]
-        if not cliente.empty: # Verifica si el cliente existe 
+    def existe_vehiculo(self, placa):
+        vehiculo = self.vehiculo_df[self.vehiculo_df["placa"] == placa]
+        if not vehiculo.empty: # Verifica si la placa existe 
             return True
         return False
+           
     
     def cargar_a_csv(self):
         self.vehiculo_df = self.vehiculo_df.astype(str)
