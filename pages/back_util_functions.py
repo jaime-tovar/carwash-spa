@@ -62,15 +62,30 @@ class Gestion_Clientes:
 class Gestion_Vehiculos:
     def __init__(self):  # Inicializamos el archivo donde se van a guardar los datos
         self.archivo_csv='pages/data/vehicles.csv'
+        self.archivo_tipos_vehiculos = 'pages/data/vehicles_types.csv'
     
     def cargar_dataframe(self):
         try:
-            self.vehiculo_df = pd.read_csv(self.archivo_csv, dtype=str, index_col='id')  # Carga los datos desde el archivo csv en un DataFrame
+            self.vehiculo_df = pd.read_csv(self.archivo_csv, dtype=str, index_col='id')# Carga los datos desde el archivo csv en un DataFrame
         except FileNotFoundError:
             # Si el DataFrame no existe, crea un nuevo DataFrame con las columnas dadas
-            self.vehiculo_df = pd.DataFrame(columns=['placa', 'tipo_vehiculo', 'marca', 'modelo', 'cilindraje','tipo'])
+            self.vehiculo_df = pd.DataFrame(columns=['placa', 'categoria', 'tipo', 'marca', 'modelo', 'cilindraje', 'propietario'])
             self.vehiculo_df.index.name = 'id'
             
+        return self.vehiculo_df
+    
+    def dataframe_front(self):
+        self.cargar_dataframe()
+        clientes = Gestion_Clientes()
+        df_clientes = clientes.cargar_dataframe()
+        self.vehiculo_df = pd.merge(self.vehiculo_df,
+                                    df_clientes[['cedula', 'nombre']],
+                                    left_on='propietario',
+                                    right_on='cedula',
+                                    how='left')
+        
+        self.vehiculo_df = self.vehiculo_df[['placa','categoria','tipo','marca','modelo','cilindraje','propietario','nombre']]
+        
         return self.vehiculo_df
     
     def existe_vehiculo(self, placa):
@@ -78,14 +93,13 @@ class Gestion_Vehiculos:
         if not vehiculo.empty: # Verifica si la placa existe 
             return True
         return False
-           
-    
+
     def cargar_a_csv(self):
         self.vehiculo_df = self.vehiculo_df.astype(str)
         # Guarda el DataFrame actualizado en el archivo CSV
         self.vehiculo_df.to_csv(path_or_buf=self.archivo_csv, sep=",", index=True)
          
-    def registrar_vehiculo(self, placa, tipo_vehiculo, marca, modelo, cilindraje, tipo):
+    def registrar_vehiculo(self, placa, categoria, tipo, marca, modelo, cilindraje, propietario):
         self.cargar_dataframe()
         
         if self.vehiculo_df.empty:
@@ -97,11 +111,12 @@ class Gestion_Vehiculos:
         # Crea un nuevo DataFrame con los datos del nuevo cliente
         nuevo_cliente_df = pd.DataFrame([{
             "placa": placa,
-            "tipo_vehiculo": tipo_vehiculo ,
+            "categoria": categoria,
+            "tipo" : tipo,
             "marca": marca,
             "modelo": modelo,
             "cilindraje": cilindraje,
-            "tipo" : tipo
+            "propietario": propietario
         }], index=[id_maximo])
         
         nuevo_cliente_df.index.name = 'id'
@@ -110,14 +125,19 @@ class Gestion_Vehiculos:
         
         self.cargar_a_csv()
         
-    def editar_vehiculo(self, id, placa, tipo_vehiculo, marca, modelo, cilindraje, tipo):
+    def editar_vehiculo(self, id, placa, categoria, tipo, marca, modelo, cilindraje, propietario):
         self.cargar_dataframe()
         self.vehiculo_df = self.vehiculo_df.astype(str)
         if id in self.vehiculo_df.index:
-            self.vehiculo_df.loc[id, ['placa', 'tipo_vehiculo', 'marca', 'modelo', 'cilindraje', 'tipo']] = [
-                placa, tipo_vehiculo, marca, modelo, cilindraje, tipo
+            self.vehiculo_df.loc[id, ['placa', 'categoria', 'tipo', 'marca', 'modelo', 'cilindraje', 'propietario']] = [
+                placa, categoria, tipo, marca, modelo, cilindraje, propietario
             ]
         self.cargar_a_csv()
+    
+    def diccionario_tipos_vehiculos(self):
+        df = pd.read_csv(self.archivo_tipos_vehiculos)
+        diccionario = df.groupby('categoria')['tipo'].apply(list).to_dict()
+        return diccionario
 
 class Gestion_Usuarios:
     def __init__(self):  # Inicializamos el archivo donde se van a guardar los datos

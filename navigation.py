@@ -47,7 +47,6 @@ def make_sidebar():
         elif get_current_page_name() != "main":
             st.switch_page("main.py")
 
-
 def logout():
     st.session_state.logged_in = False
     st.info("Cerrando sesión...")

@@ -3,12 +3,17 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from time import sleep
 from navigation import make_sidebar
-from pages.back_util_functions import Gestion_Clientes
+from pages.back_util_functions import Gestion_Clientes, Gestion_Vehiculos
 from pages.front_util_functions import validate_email, validate_cedula, validate_celular
 
 make_sidebar()
 st.session_state.df_state = False
 st.session_state.validaciones_data = True
+if "input_text" not in st.session_state:
+    st.session_state.input_text = ""
+
+def update_text():
+    st.session_state.input_text = st.session_state.input_text.upper()
 
 @st.dialog("Agregar nuevo cliente")
 def btn_agregar():
@@ -61,6 +66,30 @@ def btn_editar(dict_values):
         cliente = Gestion_Clientes()
         cliente.editar_cliente(dict_values['id'] ,str(cedula), nombre, telefono, fecha_nacimiento, email)
         st.success("Se ha actualizado exitosamente datos del cliente")
+        sleep(1)
+        st.rerun()
+
+@st.dialog("Agregar vehículo a cliente")
+def btn_agregar_vehiculo(dict_values):
+    left0, right0 = st.columns(2)
+    placa = left0.text_input("Placa *", key="input_text", on_change=update_text)
+    cilindraje = right0.text_input("Cilindraje *")
+    vehiculos = Gestion_Vehiculos()
+    dict_categorias = vehiculos.diccionario_tipos_vehiculos()
+    left1, right1 = st.columns(2)
+    categoria = left1.selectbox("Categoria *", dict_categorias.keys())
+    tipo = right1.selectbox('Tipo *', dict_categorias[categoria])
+    left2, right2 = st.columns(2)
+    marca = left2.text_input("Marca")
+    modelo = right2.text_input("Modelo")
+    propietario = st.text_input("Propietario",
+                                value=f"{dict_values['cedula']} | {dict_values['nombre']}",
+                                disabled=True)
+    st.write('\* Campos obligatorios')
+    if st.button("Guardar", key=3):
+        vehiculo = Gestion_Vehiculos()
+        vehiculo.registrar_vehiculo(placa, categoria, tipo, marca, modelo, cilindraje, propietario)
+        st.success("Vehículo creado existosamente")
         sleep(1)
         st.rerun()
         
@@ -125,10 +154,17 @@ except IndexError:
 
 
 if "btn_editar" not in st.session_state:
-    if right.button("Editar", key=2):
+    if middle.button("Editar", key=2):
         if dict_edit_values is None:
             st.toast('Primero seleccione un registro')
         else:
             btn_editar(dict_edit_values)
+
+if "btn_agregar_vehiculo" not in st.session_state:
+    if right.button("Agregar Vehículo", key=12):
+        if dict_edit_values is None:
+            st.toast('Primero seleccione un registro')
+        else:
+            btn_agregar_vehiculo(dict_edit_values)
 
 #st.write(dict_edit_values)

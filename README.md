@@ -5,9 +5,12 @@ Proyecto de Python usando pandas para el manejo de dataframes, numpy y streamlit
 ## Requisitos
 - Python 3.x
 - Pandas
-- Numpy
 - Streamlit
 
 ## Instalación
 ```sh
 pip install -r requirements.txt
+
+## Ejecutar Aplicación
+```sh
+pyhton -m streamlit run main.py
