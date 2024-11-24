@@ -7,8 +7,11 @@ from pages.back_util_functions import Gestion_Clientes, Gestion_Vehiculos
 from pages.front_util_functions import validate_email, validate_cedula, validate_celular
 
 make_sidebar()
-st.session_state.df_state = False
+# Variables temporales de sesion
+st.session_state.df_state_clientes = False
+st.session_state.df_state_vehiculos = False
 st.session_state.validaciones_data = True
+
 if "input_text" not in st.session_state:
     st.session_state.input_text = ""
 
@@ -73,7 +76,9 @@ def btn_editar(dict_values):
 def btn_agregar_vehiculo(dict_values):
     left0, right0 = st.columns(2)
     placa = left0.text_input("Placa *", key="input_text", on_change=update_text)
-    cilindraje = right0.text_input("Cilindraje *")
+    if placa and len(placa) != 6:
+        left0.warning('Ingrese una placa válida')
+    cilindraje = right0.number_input("Cilindraje *", min_value = 100, step=5, format='%d')
     vehiculos = Gestion_Vehiculos()
     dict_categorias = vehiculos.diccionario_tipos_vehiculos()
     left1, right1 = st.columns(2)
@@ -83,12 +88,12 @@ def btn_agregar_vehiculo(dict_values):
     marca = left2.text_input("Marca")
     modelo = right2.text_input("Modelo")
     propietario = st.text_input("Propietario",
-                                value=f"{dict_values['cedula']} | {dict_values['nombre']}",
+                                placeholder=f"{dict_values['cedula']} | {dict_values['nombre']}",
                                 disabled=True)
     st.write('\* Campos obligatorios')
-    if st.button("Guardar", key=3):
+    if st.button("Guardar", key=3, type="primary"):
         vehiculo = Gestion_Vehiculos()
-        vehiculo.registrar_vehiculo(placa, categoria, tipo, marca, modelo, cilindraje, propietario)
+        vehiculo.registrar_vehiculo(placa, categoria, tipo, marca, modelo, cilindraje, dict_values['cedula'])
         st.success("Vehículo creado existosamente")
         sleep(1)
         st.rerun()
@@ -101,70 +106,93 @@ if "btn_agregar" not in st.session_state:
     if left.button("Agregar", key=1):
         btn_agregar()
 
-if not st.session_state.df_state:
-    df = Gestion_Clientes()
-    st.session_state.df = df.cargar_dataframe()
-    st.session_state.df_state = True
+if not st.session_state.df_state_clientes:
+    df_clientes = Gestion_Clientes()
+    st.session_state.df_clientes = df_clientes.cargar_dataframe()
+    st.session_state.df_state_clientes = True
 
-event = st.dataframe(
-    st.session_state.df,
-    key="data",
+event_clientes = st.dataframe(
+    st.session_state.df_clientes,
+    key="clientes",
     on_select="rerun",
     selection_mode=['single-row'],
     column_config={
-        "id": st.column_config.TextColumn(
-            "ID",
-            default="st."
-            ),
-        "cedula": st.column_config.TextColumn(
-            "Cédula",
-            default="st."
-            ),
-        "nombre": st.column_config.TextColumn(
-            "Nombre",
-            default="st."
-            ),
-        "fecha_nacimiento": st.column_config.TextColumn(
-            "Fecha de Nacimiento",
-            default="st."
-            ),
-        "telefono": st.column_config.TextColumn(
-            "Teléfono",
-            default="st."
-            ),
-        "email": st.column_config.TextColumn(
-            "Correo Electrónico",
-            default="st."
-            )  
+        "id": st.column_config.TextColumn("ID", default="st."),
+        "cedula": st.column_config.TextColumn("Cédula", default="st."),
+        "nombre": st.column_config.TextColumn("Nombre", default="st."),
+        "fecha_nacimiento": st.column_config.TextColumn("Fecha de Nacimiento", default="st."),
+        "telefono": st.column_config.TextColumn("Teléfono", default="st."),
+        "email": st.column_config.TextColumn("Correo Electrónico", default="st.")  
     },
-    height= 300
+    height= 250
 )
 
 try:
-    dict_edit_values = {
-        'id' : event.selection.rows[0]+1,
-        'nombre' : st.session_state.df.iloc[event.selection.rows].iat[0, 0],
-        'cedula' : str(st.session_state.df.iloc[event.selection.rows].iat[0, 1]),
-        'fecha_nacimiento' : datetime.strptime(st.session_state.df.iloc[event.selection.rows].iat[0, 2], "%Y-%m-%d").date(),
-        'telefono' : str(st.session_state.df.iloc[event.selection.rows].iat[0, 3]),
-        'email' : st.session_state.df.iloc[event.selection.rows].iat[0, 4]
+    dict_clientes_values = {
+        'id' : event_clientes.selection.rows[0]+1,
+        'nombre' : str(st.session_state.df_clientes.iloc[event_clientes.selection.rows].iat[0, 0]),
+        'cedula' : str(st.session_state.df_clientes.iloc[event_clientes.selection.rows].iat[0, 1]),
+        'fecha_nacimiento' : datetime.strptime(st.session_state.df_clientes.iloc[event_clientes.selection.rows].iat[0, 2], "%Y-%m-%d").date(),
+        'telefono' : str(st.session_state.df_clientes.iloc[event_clientes.selection.rows].iat[0, 3]),
+        'email' : str(st.session_state.df_clientes.iloc[event_clientes.selection.rows].iat[0, 4])
     }
 except IndexError:
-    dict_edit_values = None
+    dict_clientes_values = None
 
 
 if "btn_editar" not in st.session_state:
     if middle.button("Editar", key=2):
-        if dict_edit_values is None:
+        if dict_clientes_values is None:
             st.toast('Primero seleccione un registro')
         else:
-            btn_editar(dict_edit_values)
+            btn_editar(dict_clientes_values)
 
 if "btn_agregar_vehiculo" not in st.session_state:
     if right.button("Agregar Vehículo", key=12):
-        if dict_edit_values is None:
+        if dict_clientes_values is None:
             st.toast('Primero seleccione un registro')
         else:
-            btn_agregar_vehiculo(dict_edit_values)
+            btn_agregar_vehiculo(dict_clientes_values)
 
-#st.write(dict_edit_values)
+#st.write(dict_clientes_values)
+st.header('Vehículos')
+
+if not st.session_state.df_state_vehiculos:
+    df_vehiculos = Gestion_Vehiculos()
+    st.session_state.df_vehiculos = df_vehiculos.dataframe_front()
+    st.session_state.df_state_vehiculos = True
+
+event_vehiculos = st.dataframe(
+    st.session_state.df_vehiculos,
+    key="vehiculos",
+    on_select="rerun",
+    selection_mode=['single-row'],
+    column_config={
+        "id": st.column_config.TextColumn("ID", default="st."),
+        "placa": st.column_config.TextColumn("Placa", default="st."),
+        "categoria": st.column_config.TextColumn("Categoria", default="st."),
+        "tipo": st.column_config.TextColumn("Tipo", default="st."),
+        "marca": st.column_config.TextColumn("Marca", default="st."),
+        "modelo": st.column_config.TextColumn("Modelo", default="st."),
+        "cilindraje": st.column_config.TextColumn("Cilindraje", default="st."),
+        "propietario": st.column_config.TextColumn("Cédula Propietario", default="st."),
+        "nombre": st.column_config.TextColumn("Propietario", default="st.")
+    },
+    height= 250
+)
+
+try:
+    dict_vehiculos_values = {
+        'id' : event_vehiculos.selection.rows[0]+1,
+        'placa' : st.session_state.df_vehiculos.iloc[event_vehiculos.selection.rows].iat[0, 0],
+        'categoria' : str(st.session_state.df_vehiculos.iloc[event_vehiculos.selection.rows].iat[0, 1]),
+        'tipo' : str(st.session_state.df_vehiculos.iloc[event_vehiculos.selection.rows].iat[0, 2]),
+        'marca' : str(st.session_state.df_vehiculos.iloc[event_vehiculos.selection.rows].iat[0, 3]),
+        'modelo' : str(st.session_state.df_vehiculos.iloc[event_vehiculos.selection.rows].iat[0, 4]),
+        'cilindraje' : str(st.session_state.df_vehiculos.iloc[event_vehiculos.selection.rows].iat[0, 5]),
+        'propietario' : str(st.session_state.df_vehiculos.iloc[event_vehiculos.selection.rows].iat[0, 6])
+    }
+except IndexError:
+    dict_vehiculos_values = None
+
+st.write(dict_vehiculos_values)

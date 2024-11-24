@@ -1,21 +1,21 @@
 id,placa,categoria,tipo,marca,modelo,cilindraje,propietario
-1,ABC123,Moto,Sport,Yamaha,YZF-R3,321cc,123456789
-2,DEF456,Moto,Naked,Honda,CB500F,471cc,50999455
-3,GHI789,Moto,Enduro,KTM,390 Adventure,373cc,987654321
-4,JKL012,Moto,Touring,Suzuki,V-Strom 650,645cc,456789123
-5,MNO345,Moto,Cruiser,Harley-Davidson,Street 750,749cc,369258147
-6,PQR678,Moto,Scooters,Vespa,GTS 300,278cc,654321987
-7,STU901,Moto,Trial,GasGas,TXT 300,300cc,1003079468
-8,VWX234,Moto,Motocross,Yamaha,YZ250F,250cc,321987654
-9,YZA567,Auto,Sedán,Toyota,Corolla,1798cc,1001362287
-10,BCD890,Auto,Hatchback,Volkswagen,Golf,1498cc,147258369
-11,EFG123,Auto,SUV,Jeep,Grand Cherokee,3604cc,159357456
-12,HIJ456,Auto,Convertible,BMW,4 Series,1998cc,258369147
-13,KLM789,Auto,Deportivo,Porsche,911,2981cc,789123456
-14,NOP012,Auto,Roadster,Mazda,MX-5,1998cc,3001472583
-15,QRS345,Auto,Familiar,Honda,Odyssey,3471cc,987654321
-16,TUV678,Camioneta,Pickup,Ford,F-150,5000cc,2346353432
-17,WXY901,Camioneta,SUV,Chevrolet,Tahoe,5328cc,3001593574
-18,ZAB234,Camioneta,Doble Cabina,Toyota,Hilux,2393cc,3003219876
-19,CDE567,Quad/ATV,Cuatrimotos,Can-Am,Outlander 450,427cc,3003692581
-20,FGH890,Quad/ATV,UTV,Polaris,RZR 570,567cc,19850620
+1,ABC123,Moto,Sport,Yamaha,YZF-R3,321,123456789
+2,DEF456,Moto,Naked,Honda,CB500F,471,50999455
+3,GHI789,Moto,Enduro,KTM,390 Adventure,373,987654321
+4,JKL012,Moto,Touring,Suzuki,V-Strom 650,645,456789123
+5,MNO345,Moto,Cruiser,Harley-Davidson,Street 750,749,369258147
+6,PQR678,Moto,Scooters,Vespa,GTS 300,278,654321987
+7,STU901,Moto,Trial,GasGas,TXT 300,300,1003079468
+8,VWX234,Moto,Motocross,Yamaha,YZ250F,250,321987654
+9,YZA567,Auto,Sedán,Toyota,Corolla,1798,1001362287
+10,BCD890,Auto,Hatchback,Volkswagen,Golf,1498,147258369
+11,EFG123,Auto,SUV,Jeep,Grand Cherokee,3604,159357456
+12,HIJ456,Auto,Convertible,BMW,4 Series,1998,258369147
+13,KLM789,Auto,Deportivo,Porsche,911,2981,789123456
+14,NOP012,Auto,Roadster,Mazda,MX-5,1998,789123456
+15,QRS345,Auto,Familiar,Honda,Odyssey,3471,987654321
+16,TUV678,Camioneta,Pickup,Ford,F-150,5000,2346353432
+17,WXY901,Camioneta,SUV,Chevrolet,Tahoe,5328,2346353432
+18,ZAB234,Camioneta,Doble Cabina,Toyota,Hilux,2393,2346353432
+19,CDE567,Quad/ATV,Cuatrimotos,Can-Am,Outlander 450,427,2346353432
+20,FGH890,Quad/ATV,UTV,Polaris,RZR 570,567,2346353432

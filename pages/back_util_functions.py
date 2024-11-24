@@ -78,15 +78,14 @@ class Gestion_Vehiculos:
         self.cargar_dataframe()
         clientes = Gestion_Clientes()
         df_clientes = clientes.cargar_dataframe()
-        self.vehiculo_df = pd.merge(self.vehiculo_df,
-                                    df_clientes[['cedula', 'nombre']],
-                                    left_on='propietario',
-                                    right_on='cedula',
-                                    how='left')
+        df_vehiculo = pd.merge(self.vehiculo_df,
+                               df_clientes[['cedula', 'nombre']],
+                               left_on='propietario',
+                               right_on='cedula',
+                               how='left')
+        df_vehiculo.drop(columns=['cedula'], inplace=True)  
         
-        self.vehiculo_df = self.vehiculo_df[['placa','categoria','tipo','marca','modelo','cilindraje','propietario','nombre']]
-        
-        return self.vehiculo_df
+        return df_vehiculo
     
     def existe_vehiculo(self, placa):
         vehiculo = self.vehiculo_df[self.vehiculo_df["placa"] == placa]
