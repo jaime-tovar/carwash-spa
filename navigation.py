@@ -20,8 +20,8 @@ def make_sidebar():
     with open(ruta_json, 'r') as file:
         data = json.load(file)
     nombre_empresa = data['nombre']
-    st.logo(ruta, size='large')
     with st.sidebar:
+        st.logo(ruta, size='large')
         st.image(ruta, use_container_width=False, width = 100)
         st.title(nombre_empresa)
 
@@ -30,13 +30,13 @@ def make_sidebar():
                 st.page_link("pages/principal.py", label="Principal", icon="🏠")
                 st.page_link("pages/clients.py", label="Gestión Clientes", icon="👨🏻‍💼")
                 st.page_link("pages/vehicles.py", label="Gestión Vehículos", icon="🚘")
+                st.page_link("pages/services.py", label="Gestión Servicios", icon="📦")
                 st.page_link("pages/reports.py", label="Reportes", icon="📋")
                 st.page_link("pages/config.py", label="Configuraciones", icon="🛠️")
 
             if st.session_state.role == 'usuario':
                 st.page_link("pages/principal.py", label="Principal", icon="🏠")
                 st.page_link("pages/clients.py", label="Gestión Clientes", icon="👨🏻‍💼")
-                st.page_link("pages/vehicles.py", label="Gestión Vehículos", icon="🚘")
 
             st.write("")
             st.write("")

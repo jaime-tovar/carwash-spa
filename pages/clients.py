@@ -78,32 +78,40 @@ def btn_agregar_vehiculo(dict_values):
     placa = left0.text_input("Placa *", key="input_text", on_change=update_text)
     if placa and len(placa) != 6:
         left0.warning('Ingrese una placa válida')
-    cilindraje = right0.number_input("Cilindraje *", min_value = 100, step=5, format='%d')
+    propietario = right0.text_input("Propietario",
+                                    placeholder=f"{dict_values['cedula']} | {dict_values['nombre']}",
+                                    disabled=True)
     vehiculos = Gestion_Vehiculos()
     dict_categorias = vehiculos.diccionario_tipos_vehiculos()
     left1, right1 = st.columns(2)
-    categoria = left1.selectbox("Categoria *", dict_categorias.keys())
-    tipo = right1.selectbox('Tipo *', dict_categorias[categoria])
+    tipo_vehiculo = left1.selectbox("Categoria *", dict_categorias.keys())
+    categoria = right1.selectbox('Tipo *', dict_categorias[tipo_vehiculo])
     left2, right2 = st.columns(2)
     marca = left2.text_input("Marca")
     modelo = right2.text_input("Modelo")
-    propietario = st.text_input("Propietario",
-                                placeholder=f"{dict_values['cedula']} | {dict_values['nombre']}",
-                                disabled=True)
+    cc_dict = vehiculos.diccionario_cc_categorias()
+    if tipo_vehiculo == 'Moto':
+        cilindraje = st.number_input("Cilindraje *",
+                                     min_value=int(cc_dict[categoria][0]),
+                                     max_value=int(cc_dict[categoria][1]),
+                                     step=5, format='%d')
+    else:
+        cilindraje = st.number_input("Cilindraje *", min_value=600,
+                                     step=5, format='%d')
     st.write('\* Campos obligatorios')
     if st.button("Guardar", key=3, type="primary"):
         vehiculo = Gestion_Vehiculos()
-        vehiculo.registrar_vehiculo(placa, categoria, tipo, marca, modelo, cilindraje, dict_values['cedula'])
+        vehiculo.registrar_vehiculo(placa, tipo_vehiculo, categoria, marca, modelo, cilindraje, dict_values['cedula'])
         st.success("Vehículo creado existosamente")
         sleep(1)
         st.rerun()
         
-st.header('Gestión de Clientes')
+st.header('Administración de Clientes')
 
 left, middle, right = st.columns(3)
 
 if "btn_agregar" not in st.session_state:
-    if left.button("Agregar", key=1):
+    if left.button("Agregar", key=1, type="primary"):
         btn_agregar()
 
 if not st.session_state.df_state_clientes:
@@ -155,7 +163,7 @@ if "btn_agregar_vehiculo" not in st.session_state:
             btn_agregar_vehiculo(dict_clientes_values)
 
 #st.write(dict_clientes_values)
-st.header('Vehículos')
+st.header('Administración de Vehículos')
 
 if not st.session_state.df_state_vehiculos:
     df_vehiculos = Gestion_Vehiculos()

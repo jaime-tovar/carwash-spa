@@ -1,0 +1,46 @@
+id,servicio,detalles_servicio,tipo_vehiculo,categoria,precio
+1,Lavada Sencilla,,Moto,Categoria 1,28000
+2,Lavada Sencilla,,Moto,Categoria 2,33000
+3,Lavada Sencilla,,Moto,Categoria 3,38000
+4,Lavada Sencilla,,Moto,Categoria 4,42000
+5,Lavada Completa,,Moto,Categoria 1,33000
+6,Lavada Completa,,Moto,Categoria 2,38000
+7,Lavada Completa,,Moto,Categoria 3,43000
+8,Lavada Completa,,Moto,Categoria 4,47000
+9,PPF,,Moto,Categoria 1,100000
+10,PPF,,Moto,Categoria 2,100000
+11,PPF,,Moto,Categoria 3,200000
+12,PPF,,Moto,Categoria 4,200000
+13,Recubrimiento ceramico,,Moto,Categoria 1,170000
+14,Recubrimiento ceramico,,Moto,Categoria 2,170000
+15,Recubrimiento ceramico,,Moto,Categoria 3,300000
+16,Recubrimiento ceramico,,Moto,Categoria 4,300000
+17,Polichada,,Moto,General,80000
+18,Restauración de mofle cromada,,Moto,General,120000
+19,Restauración de mofle negro,,Moto,General,80000
+20,Lavada Sencilla,,Carro,Liviano,35000
+21,Lavada Sencilla,,Carro,SUB V y CV,40000
+22,Lavada Sencilla,,Carro,Coupé y alto rendimiento,45000
+23,Lavada Sencilla,,Carro,Pesados,50000
+24,Lavada Completa,,Carro,Liviano,40000
+25,Lavada Completa,,Carro,SUB V y CV,45000
+26,Lavada Completa,,Carro,Coupé y alto rendimiento,50000
+27,Lavada Completa,,Carro,Pesados,55000
+28,Lavada FULL,,Carro,Liviano,45000
+29,Lavada FULL,,Carro,SUB V y CV,50000
+30,Lavada FULL,,Carro,Coupé y alto rendimiento,55000
+31,Lavada FULL,,Carro,Pesados,60000
+32,Lavada de motor,,Carro,Liviano,30000
+33,Lavada de motor,,Carro,SUB V y CV,35000
+34,Lavada de motor,,Carro,Coupé y alto rendimiento,40000
+35,Lavada de motor,,Carro,Pesados,45000
+36,PPF,,Carro,Liviano,500000
+37,PPF,,Carro,SUB V y CV,700000
+38,PPF,,Carro,Coupé y alto rendimiento,600000
+39,Mantenimiento aire acondicionado,,Carro,General,100000
+40,Eliminacion de olores,,Carro,General,80000
+41,Vinilos decorativos,,Carro,Liviano,400000
+42,Vinilos decorativos,,Carro,SUB V y CV,500000
+43,Vinilos decorativos,,Carro,Coupé y alto rendimiento,400000
+44,Polarizado,,Carro,General,200000
+45,Polichada,,Carro,General,60000

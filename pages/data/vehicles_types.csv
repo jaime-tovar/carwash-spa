@@ -1,21 +1,9 @@
-id,categoria,tipo
-1,Moto,Naked
-2,Moto,Enduro
-3,Moto,Touring
-4,Moto,Cruiser
-5,Moto,Sport
-6,Moto,Scooters
-7,Moto,Trial
-8,Moto,Motocross
-9,Auto,Sedán
-10,Auto,Hatchback
-11,Auto,SUV
-12,Auto,Convertible
-13,Auto,Deportivo
-14,Auto,Roadster
-15,Auto,Familiar
-16,Camioneta,Pickup
-17,Camioneta,SUV
-18,Camioneta,Doble Cabina
-19,Quad/ATV,Cuatrimotos
-20,Quad/ATV,UTV
+id,tipo_vehiculo,categoria,descripcion,cc_min,cc_max
+1,Moto,Categoria 1,,100,199
+2,Moto,Categoria 2,,200,499
+3,Moto,Categoria 3,,500,900
+4,Moto,Categoria 4,,901,2000
+5,Auto,Liviano,,,
+6,Auto,SUB-V/CV,,,
+7,Auto,Coupé/Alto Rendimiento,,,
+8,Auto,Pesados,,,

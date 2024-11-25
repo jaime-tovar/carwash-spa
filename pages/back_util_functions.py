@@ -69,7 +69,7 @@ class Gestion_Vehiculos:
             self.vehiculo_df = pd.read_csv(self.archivo_csv, dtype=str, index_col='id')# Carga los datos desde el archivo csv en un DataFrame
         except FileNotFoundError:
             # Si el DataFrame no existe, crea un nuevo DataFrame con las columnas dadas
-            self.vehiculo_df = pd.DataFrame(columns=['placa', 'categoria', 'tipo', 'marca', 'modelo', 'cilindraje', 'propietario'])
+            self.vehiculo_df = pd.DataFrame(columns=['placa', 'tipo_vehiculo', 'categoria', 'marca', 'modelo', 'cilindraje', 'propietario'])
             self.vehiculo_df.index.name = 'id'
             
         return self.vehiculo_df
@@ -78,11 +78,12 @@ class Gestion_Vehiculos:
         self.cargar_dataframe()
         clientes = Gestion_Clientes()
         df_clientes = clientes.cargar_dataframe()
-        df_vehiculo = pd.merge(self.vehiculo_df,
-                               df_clientes[['cedula', 'nombre']],
-                               left_on='propietario',
-                               right_on='cedula',
-                               how='left')
+        df_clientes = df_clientes[['cedula', 'nombre']]
+        df_vehiculo = self.vehiculo_df.merge(df_clientes,
+                                             left_on='propietario',
+                                             right_on='cedula',
+                                             how='left')
+        df_vehiculo.set_index(self.vehiculo_df.index, inplace=True)
         df_vehiculo.drop(columns=['cedula'], inplace=True)  
         
         return df_vehiculo
@@ -98,7 +99,7 @@ class Gestion_Vehiculos:
         # Guarda el DataFrame actualizado en el archivo CSV
         self.vehiculo_df.to_csv(path_or_buf=self.archivo_csv, sep=",", index=True)
          
-    def registrar_vehiculo(self, placa, categoria, tipo, marca, modelo, cilindraje, propietario):
+    def registrar_vehiculo(self, placa, tipo_vehiculo, categoria, marca, modelo, cilindraje, propietario):
         self.cargar_dataframe()
         
         if self.vehiculo_df.empty:
@@ -110,8 +111,8 @@ class Gestion_Vehiculos:
         # Crea un nuevo DataFrame con los datos del nuevo cliente
         nuevo_cliente_df = pd.DataFrame([{
             "placa": placa,
-            "categoria": categoria,
-            "tipo" : tipo,
+            "tipo_vehiculo": tipo_vehiculo,
+            "categoria" : categoria,
             "marca": marca,
             "modelo": modelo,
             "cilindraje": cilindraje,
@@ -124,19 +125,25 @@ class Gestion_Vehiculos:
         
         self.cargar_a_csv()
         
-    def editar_vehiculo(self, id, placa, categoria, tipo, marca, modelo, cilindraje, propietario):
+    def editar_vehiculo(self, id, placa, tipo_vehiculo, categoria, marca, modelo, cilindraje, propietario):
         self.cargar_dataframe()
         self.vehiculo_df = self.vehiculo_df.astype(str)
         if id in self.vehiculo_df.index:
-            self.vehiculo_df.loc[id, ['placa', 'categoria', 'tipo', 'marca', 'modelo', 'cilindraje', 'propietario']] = [
+            self.vehiculo_df.loc[id, ['placa', 'tipo_vehiculo', 'categoria', 'marca', 'modelo', 'cilindraje', 'propietario']] = [
                 placa, categoria, tipo, marca, modelo, cilindraje, propietario
             ]
         self.cargar_a_csv()
     
     def diccionario_tipos_vehiculos(self):
         df = pd.read_csv(self.archivo_tipos_vehiculos)
-        diccionario = df.groupby('categoria')['tipo'].apply(list).to_dict()
+        diccionario = df.groupby('tipo_vehiculo')['categoria'].apply(list).to_dict()
         return diccionario
+    
+    def diccionario_cc_categorias(self):
+        df = pd.read_csv(self.archivo_tipos_vehiculos)
+        cc_dict = df[df['tipo_vehiculo'] == 'Moto']
+        cc_dict = cc_dict.set_index('categoria')[['cc_min', 'cc_max']].apply(list, axis=1).to_dict()
+        return cc_dict
 
 class Gestion_Usuarios:
     def __init__(self):  # Inicializamos el archivo donde se van a guardar los datos
