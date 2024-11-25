@@ -109,7 +109,7 @@ class Gestion_Vehiculos:
             id_maximo = self.vehiculo_df.index.astype(int).max() + 1
         
         # Crea un nuevo DataFrame con los datos del nuevo cliente
-        nuevo_cliente_df = pd.DataFrame([{
+        nuevo_vehiculo_df = pd.DataFrame([{
             "placa": placa,
             "tipo_vehiculo": tipo_vehiculo,
             "categoria" : categoria,
@@ -119,9 +119,9 @@ class Gestion_Vehiculos:
             "propietario": propietario
         }], index=[id_maximo])
         
-        nuevo_cliente_df.index.name = 'id'
+        nuevo_vehiculo_df.index.name = 'id'
         
-        self.vehiculo_df = pd.concat([self.vehiculo_df, nuevo_cliente_df])
+        self.vehiculo_df = pd.concat([self.vehiculo_df, nuevo_vehiculo_df])
         
         self.cargar_a_csv()
         
@@ -145,6 +145,51 @@ class Gestion_Vehiculos:
         cc_dict = cc_dict.set_index('categoria')[['cc_min', 'cc_max']].apply(list, axis=1).to_dict()
         return cc_dict
 
+class Gestion_Servicios:
+    def __init__(self):  # Inicializamos el archivo donde se van a guardar los datos
+        self.archivo_csv='pages/data/price_services.csv'
+    
+    def cargar_dataframe(self):
+        try:
+            self.service_df = pd.read_csv(self.archivo_csv, dtype=str, index_col='id')  # Carga los datos desde el archivo csv en un DataFrame
+        except FileNotFoundError:
+            # Si el DataFrame no existe, crea un nuevo DataFrame con las columnas dadas
+            self.service_df = pd.DataFrame(columns=['servicio','precio','tipo_vehiculo','categoria','detalles_servicio'])
+            self.service_df.index.name = 'id'
+            
+        return self.service_df
+    
+    def cargar_a_csv(self):
+        self.service_df = self.service_df.astype(str)
+        # Guarda el DataFrame actualizado en el archivo CSV
+        self.service_df.to_csv(path_or_buf=self.archivo_csv, sep=",", index=True)
+        
+    def registrar_servicio(self, servicio, precio, tipo_vehiculo, categoria, detalles_servicio):
+        detalles_servicio = f'\"{detalles_servicio}\"'
+        self.cargar_dataframe()
+        
+        if self.service_df.empty:
+            id_maximo = 1  # Si está vacío, asignar el primer id como 1
+        else:
+            # Se extrae el id maximo que haya en el dataframe para poder calcular el id siguiente
+            id_maximo = self.service_df.index.astype(int).max() + 1
+        
+        # Crea un nuevo DataFrame con los datos del nuevo cliente
+        nuevo_servicio_df = pd.DataFrame([{
+            "servicio": servicio,
+            "precio": precio,
+            "tipo_vehiculo": tipo_vehiculo,
+            "categoria": categoria,
+            "detalles_servicio": detalles_servicio
+        }], index=[id_maximo])
+        
+        nuevo_servicio_df.index.name = 'id'
+        
+        self.service_df = pd.concat([self.service_df, nuevo_servicio_df])
+        
+        self.cargar_a_csv()
+    
+    
 class Gestion_Usuarios:
     def __init__(self):  # Inicializamos el archivo donde se van a guardar los datos
         self.archivo_csv='pages/data/users.csv'
