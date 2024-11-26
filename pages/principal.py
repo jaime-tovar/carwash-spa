@@ -5,6 +5,8 @@ from pages.back_util_functions import Gestion_Servicios, Gestion_Vehiculos
 
 make_sidebar()
 
+st.session_state.df_temp_services = False
+
 placas = Gestion_Vehiculos()
 placas = placas.listado_placas_clientes()
 st.header("Crear entradas a lavadero")
@@ -23,12 +25,21 @@ servicios = st.multiselect('Seleccione los servicios',
                            key='selectbox_servicios')
 servicios_adicionales = st.multiselect('Seleccione los servicios adicionales', servicios_precios[placas[vehiculo][2]]['General'].keys())
 
-eleccion = {
-    'placa':vehiculo,
+dict_temp_services =  {
+    'placa' : vehiculo,
     'tipo_vehiculo': placas[vehiculo][2],
     'categoria': placas[vehiculo][3],
-    'cedula':placas[vehiculo][0],
-    'servicios': servicios+servicios_adicionales
+    'cedula' : placas[vehiculo][0],
+    'servicio': servicios+servicios_adicionales
 }
 
-st.write(eleccion)
+if len(dict_temp_services['servicio']) > 0:
+    st.subheader('Resumen')
+    if not st.session_state.df_temp_services:
+        servicios_temp = Gestion_Servicios()
+        df_servicios_temp = servicios_temp.dataframe_temp_services(dict_temp_services)
+        st.dataframe(df_servicios_temp)
+        st.session_state.df_temp_services = True
+        st.button('Iniciar Servicio', type='primary')
+else:
+    st.session_state.df_temp_services = False

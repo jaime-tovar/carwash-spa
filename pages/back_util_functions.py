@@ -203,10 +203,9 @@ class Gestion_Servicios:
         self.cargar_a_csv()
     
     def diccionario_precios_categoria(self):
-        # Leer el archivo CSV
         df = self.cargar_dataframe()
 
-        # Crear el diccionario con la estructura deseada
+        # Se crea un diccionarioo que permita ver todos los servicios por tipo de vehiculo y categoria
         result_dict = {}
         for _, row in df.iterrows():
             tipo_vehiculo = row["tipo_vehiculo"]
@@ -214,16 +213,42 @@ class Gestion_Servicios:
             servicio = row["servicio"]
             precio = row["precio"]
 
-            # Crear las jerarquías si no existen
+            # Se crean las jerarquias del diccionario
             if tipo_vehiculo not in result_dict:
                 result_dict[tipo_vehiculo] = {}
             if categoria not in result_dict[tipo_vehiculo]:
                 result_dict[tipo_vehiculo][categoria] = {}
 
-            # Asignar el servicio y precio
+            # Se asigna el servicio y precio
             result_dict[tipo_vehiculo][categoria][servicio] = precio
 
         return result_dict
+    
+    def dataframe_temp_services(self, dict_elecciones):
+        self.cargar_dataframe()
+        
+        df_eleccion = pd.DataFrame(dict_elecciones)
+        df_eleccion = df_eleccion.explode('servicio')
+        df_merge_especifica = pd.merge(
+            df_eleccion,
+            self.service_df[self.service_df['categoria'] != 'General'],
+            on=['tipo_vehiculo', 'categoria', 'servicio'],
+            how='inner'
+        )
+        
+        servicios_no_encontrados = df_eleccion[~df_eleccion['servicio'].isin(df_merge_especifica['servicio'])]
+        
+        df_merge_general = pd.merge(
+            servicios_no_encontrados,
+            self.service_df[self.service_df['categoria'] == 'General'],
+            on=['tipo_vehiculo', 'servicio'],
+            how='inner'
+        )
+        df_merge_general['categoria'] = 'General'
+        df_final = pd.concat([df_merge_especifica, df_merge_general], ignore_index=True)
+        df_final = df_final[['placa', 'cedula', 'tipo_vehiculo', 'categoria', 'servicio', 'precio']]
+
+        return df_final
 
 class Gestion_Usuarios:
     def __init__(self):  # Inicializamos el archivo donde se van a guardar los datos
