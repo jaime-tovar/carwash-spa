@@ -18,6 +18,17 @@ nombre = right.text_input('Nombre Propietario', value=placas[vehiculo][1], disab
 servicios_precios = Gestion_Servicios()
 servicios_precios = servicios_precios.diccionario_precios_categoria()
 
-servicios = st.multiselect('Seleccione los servicios', servicios_precios[placas[vehiculo][2]][placas[vehiculo][3]].keys())
+servicios = st.multiselect('Seleccione los servicios',
+                           servicios_precios[placas[vehiculo][2]][placas[vehiculo][3]].keys(),
+                           key='selectbox_servicios')
 servicios_adicionales = st.multiselect('Seleccione los servicios adicionales', servicios_precios[placas[vehiculo][2]]['General'].keys())
 
+eleccion = {
+    'placa':vehiculo,
+    'tipo_vehiculo': placas[vehiculo][2],
+    'categoria': placas[vehiculo][3],
+    'cedula':placas[vehiculo][0],
+    'servicios': servicios+servicios_adicionales
+}
+
+st.write(eleccion)
