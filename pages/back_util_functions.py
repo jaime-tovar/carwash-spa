@@ -139,6 +139,19 @@ class Gestion_Vehiculos:
         diccionario = df.groupby('tipo_vehiculo')['categoria'].apply(list).to_dict()
         return diccionario
     
+    def listado_placas_clientes(self):
+        self.cargar_dataframe()
+        clientes = Gestion_Clientes()
+        df_clientes = clientes.cargar_dataframe()
+        df_clientes = df_clientes[['cedula', 'nombre']]
+        df_vehiculo = self.vehiculo_df.merge(df_clientes,
+                                             left_on='propietario',
+                                             right_on='cedula',
+                                             how='left')
+        diccionario_placas = {row['placa']: [row['cedula'], row['nombre'], row['tipo_vehiculo'], row['categoria']] 
+                              for _, row in df_vehiculo.iterrows()}
+        return diccionario_placas
+    
     def diccionario_cc_categorias(self):
         df = pd.read_csv(self.archivo_tipos_vehiculos)
         cc_dict = df[df['tipo_vehiculo'] == 'Moto']
@@ -189,7 +202,29 @@ class Gestion_Servicios:
         
         self.cargar_a_csv()
     
-    
+    def diccionario_precios_categoria(self):
+        # Leer el archivo CSV
+        df = self.cargar_dataframe()
+
+        # Crear el diccionario con la estructura deseada
+        result_dict = {}
+        for _, row in df.iterrows():
+            tipo_vehiculo = row["tipo_vehiculo"]
+            categoria = row["categoria"]
+            servicio = row["servicio"]
+            precio = row["precio"]
+
+            # Crear las jerarquías si no existen
+            if tipo_vehiculo not in result_dict:
+                result_dict[tipo_vehiculo] = {}
+            if categoria not in result_dict[tipo_vehiculo]:
+                result_dict[tipo_vehiculo][categoria] = {}
+
+            # Asignar el servicio y precio
+            result_dict[tipo_vehiculo][categoria][servicio] = precio
+
+        return result_dict
+
 class Gestion_Usuarios:
     def __init__(self):  # Inicializamos el archivo donde se van a guardar los datos
         self.archivo_csv='pages/data/users.csv'

@@ -7,16 +7,16 @@ id,placa,tipo_vehiculo,categoria,marca,modelo,cilindraje,propietario
 6,PQR678,Moto,Categoria 2,Vespa,GTS 300,278,654321987
 7,STU901,Moto,Categoria 2,GasGas,TXT 300,300,1003079468
 8,VWX234,Moto,Categoria 2,Yamaha,YZ250F,250,321987654
-9,YZA567,Auto,Liviano,Toyota,Corolla,1798,1001362287
-10,BCD890,Auto,Liviano,Volkswagen,Golf,1498,147258369
-11,EFG123,Auto,Liviano,Jeep,Grand Cherokee,3604,159357456
-12,HIJ456,Auto,Liviano,BMW,4 Series,1998,258369147
-13,KLM789,Auto,Liviano,Porsche,911,2981,789123456
-14,NOP012,Auto,Liviano,Mazda,MX-5,1998,789123456
-15,QRS345,Auto,Liviano,Honda,Odyssey,3471,987654321
-16,TUV678,Auto,Liviando,Ford,F-150,5000,159357456
-17,WXY901,Auto,Liviano,Chevrolet,Tahoe,5328,1001362287
-18,ZAB234,Auto,Liviano,Toyota,Hilux,2393,1001362287
+9,YZA567,Carro,Liviano,Toyota,Corolla,1798,1001362287
+10,BCD890,Carro,Liviano,Volkswagen,Golf,1498,147258369
+11,EFG123,Carro,Liviano,Jeep,Grand Cherokee,3604,159357456
+12,HIJ456,Carro,Liviano,BMW,4 Series,1998,258369147
+13,KLM789,Carro,Liviano,Porsche,911,2981,789123456
+14,NOP012,Carro,Liviano,Mazda,MX-5,1998,789123456
+15,QRS345,Carro,Liviano,Honda,Odyssey,3471,987654321
+16,TUV678,Carro,Liviando,Ford,F-150,5000,159357456
+17,WXY901,Carro,Liviano,Chevrolet,Tahoe,5328,1001362287
+18,ZAB234,Carro,Liviano,Toyota,Hilux,2393,1001362287
 19,CDE567,Moto,Categoria 2,Can-Am,Outlander 450,427,1001362287
 20,FGH890,Moto,Categoria 3,Polaris,RZR 570,567,1001362287
 21,CJO65J,Moto,Categoria 1,Suzuki,Gixxer 150,155,987654321

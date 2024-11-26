@@ -1,70 +1,23 @@
 from navigation import make_sidebar
 import streamlit as st
 import pandas as pd
+from pages.back_util_functions import Gestion_Servicios, Gestion_Vehiculos
 
 make_sidebar()
 
-servicios = {
-    'Servicio': ['Lavado Exterior', 'Lavado Interior', 'Lavado Completo', 'Limpieza de Tapicería', 'Pulido y Encerado', 
-                 'Lavado de Motor', 'Desinfección Interior', 'Tratamiento de Neumáticos'],
-    'Precio (USD)': [15, 10, 30, 25, 40, 20, 18, 12],
-    'Tiempo Estimado (min)': [30, 20, 60, 40, 50, 35, 25, 15]
-}
+placas = Gestion_Vehiculos()
+placas = placas.listado_placas_clientes()
+st.header("Crear entradas a lavadero")
 
-df_servicios = pd.DataFrame(servicios)
+left, middle, right = st.columns(3)
 
-st.header("Crear Servicios")
-st.write("")
+vehiculo = left.selectbox('Vehículo (Placa)', options=placas.keys(),  key="selectbox_2")
+cedula = middle.text_input('Cédula Propietario', value=placas[vehiculo][0], disabled=True)
+nombre = right.text_input('Nombre Propietario', value=placas[vehiculo][1], disabled=True)
 
-df_clientes = pd.read_csv('pages/data/clientes.csv')
-nombres = df_clientes['nombre'].tolist()
-df_vehiculos = pd.read_csv('pages/data/vehicles.csv')
-placas = df_vehiculos['placa'].tolist()
+servicios_precios = Gestion_Servicios()
+servicios_precios = servicios_precios.diccionario_precios_categoria()
 
-left, right = st.columns(2)
-opciones1 = nombres
-opciones2 = placas
-
-with left:
-    seleccion_vehiculo = st.selectbox("Vehículo (Placa):", opciones2,  key="selectbox_2")
-with right:
-    seleccion_cliente = st.selectbox("Cliente (Cédula | Nombre):", opciones1,  key="selectbox_1")
-
-seleccion_servicios = st.multiselect("Selecciona los servicios", df_servicios['Servicio'])
-servicios_seleccionados = df_servicios[df_servicios['Servicio'].isin(seleccion_servicios)]
-
-for index, row in servicios_seleccionados.iterrows():
-    st.write(f"Servicio: {row['Servicio']}")
-    st.write(f"Precio: ${row['Precio (USD)']}")
-    st.write(f"Tiempo estimado: {row['Tiempo Estimado (min)']} minutos")
-    st.write("---")
-
-cedula_cliente = df_clientes[df_clientes['nombre'] == seleccion_cliente]['cedula'].values[0]
-
-if len(seleccion_servicios) == 0:
-    st.warning("¡Debes seleccionar al menos un servicio para continuar!")
-
-elif st.button("Agregar servicio"):
-    data_to_save = {
-        'Cliente': seleccion_cliente,
-        'Cédula': cedula_cliente,
-        'Vehículo': seleccion_vehiculo,
-        'Placa': seleccion_vehiculo,
-        'Servicios': ', '.join(seleccion_servicios)
-    }
-
-    df_to_save = pd.DataFrame([data_to_save])
-    try:
-        df_servicios_existentes = pd.read_csv('pages/data/services.csv')
-        df_servicios_existentes = pd.concat([df_servicios_existentes, df_to_save], ignore_index=True)
-        df_servicios_existentes.to_csv('pages/data/services.csv', index=False)
-    except FileNotFoundError:
-        # Si el archivo no existe, crearlo
-        df_to_save.to_csv('pages/data/services.csv', index=False)
-
-    st.success("Servicio agregado exitosamente!")
-
-
-st.subheader("Servicios y Facturacion", divider='grey')
-
+servicios = st.multiselect('Seleccione los servicios', servicios_precios[placas[vehiculo][2]][placas[vehiculo][3]].keys())
+servicios_adicionales = st.multiselect('Seleccione los servicios adicionales', servicios_precios[placas[vehiculo][2]]['General'].keys())
 

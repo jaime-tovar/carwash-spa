@@ -3,7 +3,7 @@ id,tipo_vehiculo,categoria,descripcion,cc_min,cc_max
 2,Moto,Categoria 2,,200,499
 3,Moto,Categoria 3,,500,900
 4,Moto,Categoria 4,,901,2000
-5,Auto,Liviano,,,
-6,Auto,SUB-V/CV,,,
-7,Auto,Coupé/Alto Rendimiento,,,
-8,Auto,Pesados,,,
+5,Carro,Liviano,,,
+6,Carro,SUB-V/CV,,,
+7,Carro,Coupé/Alto Rendimiento,,,
+8,Carro,Pesados,,,
