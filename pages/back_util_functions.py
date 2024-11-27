@@ -86,7 +86,7 @@ class Gestion_Vehiculos:
             
         return self.vehiculo_df
     
-    def dataframe_front(self):
+    def dataframe_front(self, cedula):
         self.cargar_dataframe()
         clientes = Gestion_Clientes()
         df_clientes = clientes.cargar_dataframe()
@@ -95,8 +95,9 @@ class Gestion_Vehiculos:
                                              left_on='propietario',
                                              right_on='cedula',
                                              how='left')
+        df_vehiculo = df_vehiculo[df_vehiculo['cedula'] == cedula]
         df_vehiculo.set_index(self.vehiculo_df.index, inplace=True)
-        df_vehiculo.drop(columns=['cedula'], inplace=True)  
+        df_vehiculo.drop(columns=['cedula'], inplace=True)
         
         return df_vehiculo
     

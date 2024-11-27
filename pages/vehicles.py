@@ -49,40 +49,14 @@ event = st.dataframe(
     on_select="rerun",
     selection_mode=['single-row'],
     column_config={
-        "id": st.column_config.TextColumn(
-            "ID",
-            default="st."
-            ),
-        "placa": st.column_config.TextColumn(
-            "Placa",
-            default="st."
-            ),
-        "categoria": st.column_config.TextColumn(
-            "Categoria",
-            default="st."
-            ),
-        "tipo": st.column_config.TextColumn(
-            "Tipo",
-            default="st."),
-        "marca": st.column_config.TextColumn(
-            "Marca",
-            default="st."
-            ),
-        "modelo": st.column_config.TextColumn(
-            "Modelo",
-            default="st."
-            ),
-        "cilindraje": st.column_config.TextColumn(
-            "Cilindraje",
-            default="st."
-            ),
-        "propietario": st.column_config.TextColumn(
-            "Cédula Propietario",
-            default="st."
-            ),
-        "nombre": st.column_config.TextColumn(
-            "Propietario",
-            default="st."
-            )
+        "id": st.column_config.TextColumn("ID",default="st."),
+        "placa": st.column_config.TextColumn("Placa",default="st."),
+        "tipo_vehiculo": st.column_config.TextColumn("Tipo Vehículo",default="st."),
+        "tipo": st.column_config.TextColumn("Tipo",default="st."),
+        "marca": st.column_config.TextColumn("Marca",default="st."),
+        "modelo": st.column_config.TextColumn("Modelo",default="st."),
+        "cilindraje": st.column_config.TextColumn("Cilindraje",default="st."),
+        "propietario": st.column_config.TextColumn("Cédula Propietario",default="st."),
+        "nombre": st.column_config.TextColumn("Propietario",default="st.")
     }
 )

@@ -75,9 +75,9 @@ if len(dict_temp_services['servicio']) > 0:
         if "btn_init_service" not in st.session_state:
             if st.button('Iniciar Servicio', type='primary'):
                 btn_iniciar_servicio(df_servicios_temp, dict_temp_services)
-                st.toast('Se ha iniciado un servicio existosamente')
+                st.toast('Se ha iniciado un servicio exitosamente')
                 sleep(1)
-                st.session_state.reset_services = True  # Activar indicador de reinicio
+                st.session_state.reset_services = True
                 st.rerun()
 else:
     st.session_state.df_temp_services = False
