@@ -27,6 +27,12 @@ def btn_agregar():
             st.session_state.validaciones_data = False
         else:
             st.session_state.validaciones_data = True
+        cliente_cedula = Gestion_Clientes()
+        if cliente_cedula.existe_cliente(cedula):
+            st.warning("Este cédula ya se encuentra en el sistema")
+            st.session_state.validaciones_data = False
+        else:
+            st.session_state.validaciones_data = True
     
     nombre = st.text_input("Nombre *")
     telefono = st.text_input("Celular / Teléfono *")

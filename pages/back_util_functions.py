@@ -28,6 +28,7 @@ class Gestion_Clientes:
         return self.cliente_df
     
     def existe_cliente(self, cedula):
+        self.cargar_dataframe()
         cliente = self.cliente_df[self.cliente_df["cedula"] == cedula]
         if not cliente.empty: # Verifica si el cliente existe 
             return True
