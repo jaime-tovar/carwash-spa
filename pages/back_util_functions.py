@@ -161,6 +161,8 @@ class Gestion_Vehiculos:
 class Gestion_Servicios:
     def __init__(self):  # Inicializamos el archivo donde se van a guardar los datos
         self.archivo_csv='pages/data/price_services.csv'
+        self.detalle_factura = 'pages/data/detalle_factura.csv'
+        self.facturas = 'pages/data/facturas.csv'
     
     def cargar_dataframe(self):
         try:
@@ -227,6 +229,15 @@ class Gestion_Servicios:
     def dataframe_temp_services(self, dict_elecciones):
         self.cargar_dataframe()
         
+        df_detalle_factura = pd.read_csv(self.detalle_factura)
+        if df_detalle_factura.empty:
+            id_max_detalle_factura = 1
+        else:
+            id_max_detalle_factura = df_detalle_factura['id'].max() + 1
+        
+        def formatear_precio(valor):
+            return f"$ {valor:,.0f}"
+        
         df_eleccion = pd.DataFrame(dict_elecciones)
         df_eleccion = df_eleccion.explode('servicio')
         df_merge_especifica = pd.merge(
@@ -246,9 +257,36 @@ class Gestion_Servicios:
         )
         df_merge_general['categoria'] = 'General'
         df_final = pd.concat([df_merge_especifica, df_merge_general], ignore_index=True)
-        df_final = df_final[['placa', 'cedula', 'tipo_vehiculo', 'categoria', 'servicio', 'precio']]
+        df_final['id'] = range(id_max_detalle_factura, id_max_detalle_factura + len(df_final))
+        df_final['precio'] = pd.to_numeric(df_final['precio'])
+        df_final['precio_formateado'] = df_final['precio'].apply(lambda x: formatear_precio(int(x)))
+        df_final = df_final[['id','placa', 'cedula', 'tipo_vehiculo', 'categoria', 'servicio', 'precio', 'precio_formateado']]
+        df_final.index = df_final.index + 1
 
         return df_final
+    
+    def cargar_servicio_vehiculo(self, df_in):
+        df_detalle_factura = pd.read_csv(self.detalle_factura)
+        df_facturas = pd.read_csv(self.facturas)
+        
+        # Proceso para construir las transacciones de la factura
+        if df_facturas.empty:
+            id_max_facturas = 1
+        else:
+            id_max_facturas = df_facturas['id'].max() + 1
+        
+        df_in['id_factura'] = id_max_facturas
+        df_in = df_in[['id','id_factura','servicio','precio']]
+        df_in['realizado'] = True
+        
+        df_detalle_factura = pd.concat([df_detalle_factura, df_in])
+        # Se cargan las transacciones al detalle de facturas
+        df_detalle_factura.to_csv(path_or_buf=self.detalle_factura, sep=",", index=False)
+        
+        # Se carga la factura
+        
+        
+        return
 
 class Gestion_Usuarios:
     def __init__(self):  # Inicializamos el archivo donde se van a guardar los datos
