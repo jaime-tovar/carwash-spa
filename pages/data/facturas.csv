@@ -1,1 +1,3 @@
-id,placa,cedula,emision,ingreso,salida,subtotal,promocion,descuento,iva,total
+id,placa,cedula,emision,fecha_ingreso,hora_ingreso,fecha_salida,hora_salida,subtotal,promocion,descuento,iva,total
+1,DEF456,50999455,,2024-11-27,11:58:17 AM,,,113000,,,,
+2,ZAB234,1001362287,,2024-11-27,11:58:27 AM,,,560000,,,,

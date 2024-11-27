@@ -3,6 +3,10 @@ import streamlit as st
 import pandas as pd
 from time import sleep
 from pages.back_util_functions import Gestion_Servicios, Gestion_Vehiculos
+import logging
+from streamlit.logger import get_logger
+
+logging.getLogger("streamlit").setLevel(logging.ERROR)
 
 make_sidebar()
 
@@ -12,9 +16,9 @@ st.session_state.df_temp_services = False
 if 'reset_services' not in st.session_state:
     st.session_state.reset_services = False
 
-def btn_iniciar_servicio(dataframe_in):
+def btn_iniciar_servicio(dataframe_in, dict_in):
     transaccion = Gestion_Servicios()
-    transaccion.cargar_servicio_vehiculo(dataframe_in)
+    transaccion.cargar_servicio_vehiculo(dataframe_in, dict_in)
     return
 
 placas = Gestion_Vehiculos()
@@ -70,7 +74,7 @@ if len(dict_temp_services['servicio']) > 0:
         st.session_state.df_temp_services = True
         if "btn_init_service" not in st.session_state:
             if st.button('Iniciar Servicio', type='primary'):
-                btn_iniciar_servicio(df_servicios_temp)
+                btn_iniciar_servicio(df_servicios_temp, dict_temp_services)
                 st.toast('Se ha iniciado un servicio existosamente')
                 sleep(1)
                 st.session_state.reset_services = True  # Activar indicador de reinicio

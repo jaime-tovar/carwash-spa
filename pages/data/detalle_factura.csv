@@ -1,1 +1,5 @@
 id,id_factura,servicio,precio,realizado
+1,1,Lavada Sencilla,33000,True
+2,1,Restauración de mofle negro,80000,True
+3,2,PPF,500000,True
+4,2,Polichada,60000,True

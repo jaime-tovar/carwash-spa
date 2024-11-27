@@ -1,4 +1,16 @@
 import pandas as pd
+import datetime
+
+def obtener_fecha_hora():
+    # Obtener la fecha y la hora actuales
+    fecha_actual = datetime.datetime.now()
+
+    # Formatear la fecha en 'año-mes-día'
+    fecha_formateada = fecha_actual.strftime("%Y-%m-%d")
+
+    # Formatear la hora en 'hora:minuto:segundo am/pm'
+    hora_formateada = fecha_actual.strftime("%I:%M:%S %p")
+    return fecha_formateada, hora_formateada
 
 # Esta clase maneja el registro de clientes en un archivo csv   
 class Gestion_Clientes:
@@ -265,26 +277,47 @@ class Gestion_Servicios:
 
         return df_final
     
-    def cargar_servicio_vehiculo(self, df_in):
+    def cargar_servicio_vehiculo(self, df_in, dict_in):
         df_detalle_factura = pd.read_csv(self.detalle_factura)
         df_facturas = pd.read_csv(self.facturas)
         
-        # Proceso para construir las transacciones de la factura
         if df_facturas.empty:
             id_max_facturas = 1
         else:
             id_max_facturas = df_facturas['id'].max() + 1
         
+        # Proceso para construir las transacciones de la factura
         df_in['id_factura'] = id_max_facturas
         df_in = df_in[['id','id_factura','servicio','precio']]
         df_in['realizado'] = True
+        
+        sub_total = df_in['precio'].sum()
         
         df_detalle_factura = pd.concat([df_detalle_factura, df_in])
         # Se cargan las transacciones al detalle de facturas
         df_detalle_factura.to_csv(path_or_buf=self.detalle_factura, sep=",", index=False)
         
-        # Se carga la factura
+        # Proceso para construir las transacciones de la factura
+        fecha_ingreso, hora_ingreso = obtener_fecha_hora()
+        df_factura_in = pd.DataFrame([{
+            'id' : id_max_facturas,
+            'placa' : dict_in['placa'],
+            'cedula' : dict_in['cedula'],
+            'emision' : None,
+            'fecha_ingreso' : fecha_ingreso,
+            'hora_ingreso' : hora_ingreso,
+            'fecha_salida' : None,
+            'hora_salida' : None,
+            'subtotal' : sub_total,
+            'promocion' : None,
+            'descuento' : None,
+            'iva' : None,
+            'total' : None
+        }])
         
+        df_facturas = pd.concat([df_facturas, df_factura_in])
+        # Se carga la factura
+        df_facturas.to_csv(path_or_buf=self.facturas, sep=",", index=False)
         
         return
 

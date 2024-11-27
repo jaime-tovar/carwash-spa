@@ -5,3 +5,6 @@ base="light"
 primaryColor="#25a22f"
 secondaryBackgroundColor="#cbcbcb"
 textColor="#000000"
+[global]
+disableWidgetStateDuplicationWarning = true
+showWarningOnDirectExecution = false
