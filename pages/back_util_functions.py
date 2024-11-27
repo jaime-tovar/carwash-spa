@@ -63,12 +63,16 @@ class Gestion_Clientes:
         
         self.cargar_a_csv()
         
-    def editar_cliente(self, id, cedula, nombre, telefono, fecha_nacimiento=None, email=None):
+    def editar_cliente(self, id, cedula, nombre, telefono, fecha_nacimiento=None, email=None, cedula_nueva=None):
         self.cargar_dataframe()
         self.cliente_df = self.cliente_df.astype(str)
+        if cedula_nueva is not None:
+            cedula_input = cedula_nueva
+        else:
+            cedula_input = cedula
         if id in self.cliente_df.index:
             self.cliente_df.loc[id, ['cedula', 'nombre', 'telefono', 'fecha_nacimiento', 'email']] = [
-                cedula, nombre, telefono, fecha_nacimiento, email
+                cedula_input, nombre, telefono, fecha_nacimiento, email
             ]
         self.cargar_a_csv()
 
@@ -91,18 +95,6 @@ class Gestion_Vehiculos:
         self.cargar_dataframe()
         self.vehiculo_df = self.vehiculo_df[self.vehiculo_df['propietario'] == cedula]
         self.vehiculo_df = self.vehiculo_df[['placa','tipo_vehiculo','categoria','marca','modelo','cilindraje']]
-        """
-        clientes = Gestion_Clientes()
-        df_clientes = clientes.cargar_dataframe()
-        df_clientes = df_clientes[['cedula', 'nombre']]
-        df_vehiculo = self.vehiculo_df.merge(df_clientes,
-                                             left_on='propietario',
-                                             right_on='cedula',
-                                             how='left')
-        df_vehiculo = df_vehiculo.dropna(subset=['placa'])
-        df_vehiculo.set_index(self.vehiculo_df.index, inplace=True)
-        df_vehiculo.drop(columns=['cedula'], inplace=True)
-        """
         return self.vehiculo_df
     
     def existe_vehiculo(self, placa):

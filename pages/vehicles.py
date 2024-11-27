@@ -40,7 +40,7 @@ if "btn_agregar" not in st.session_state:
 
 if not st.session_state.df_state:
     df = Gestion_Vehiculos()
-    st.session_state.df = df.dataframe_front()
+    st.session_state.df = df.cargar_dataframe()
     st.session_state.df_state = True
 
 event = st.dataframe(

@@ -35,7 +35,8 @@ def btn_agregar():
             st.session_state.validaciones_data = True
     
     nombre = st.text_input("Nombre *")
-    telefono = st.text_input("Celular / Teléfono *")
+    left, right = st.columns(2)
+    telefono = left.text_input("Celular / Teléfono *")
     if telefono:
         if not validate_celular(telefono):
             st.error("Número de cellular inválido")
@@ -43,7 +44,7 @@ def btn_agregar():
         else:
             st.session_state.validaciones_data = True
     
-    fecha_nacimiento = st.date_input("Fecha Nacimiento", max_value= datetime.today(), min_value= datetime.today() - relativedelta(years=34) )
+    fecha_nacimiento = right.date_input("Fecha Nacimiento", max_value= datetime.today(), min_value= datetime.today() - relativedelta(years=34) )
     email = st.text_input("Correo Electrónico")
     if email:
         if not validate_email(email):
@@ -65,15 +66,38 @@ def btn_agregar():
 
 @st.dialog("Editar cliente")
 def btn_editar(dict_values):
-    cedula = st.text_input("Cédula", value=dict_values['cedula'], disabled=True)
+    left0, right0 = st.columns(2)
+    cedula = left0.text_input("Cédula", value=dict_values['cedula'], disabled=True)
+    right0.write('')
+    right0.write('')
+    agree = right0.checkbox("Editar cédula")
+    if agree:
+        left, right = st.columns(2)
+        cedula_ant = left.text_input("Cédula anterior", value=dict_values['cedula'], disabled=True)
+        cedula_nueva = right.text_input("Cédula nueva")
+        if not validate_cedula(cedula_nueva):
+            st.error("La cédula no es válida")
+            st.session_state.validaciones_data = False
+        else:
+            st.session_state.validaciones_data = True
+        cliente_cedula = Gestion_Clientes()
+        if cliente_cedula.existe_cliente(cedula_nueva):
+            st.warning("Este cédula ya se encuentra en el sistema")
+            st.session_state.validaciones_data = False
+        else:
+            st.session_state.validaciones_data = True
     nombre = st.text_input("Nombre *", value=dict_values['nombre'])
-    telefono = st.text_input("Teléfono *", value=dict_values['telefono'])
-    fecha_nacimiento = st.date_input("Fecha Nacimiento", value=dict_values['fecha_nacimiento'])
+    left1, right1 = st.columns(2)
+    telefono = left1.text_input("Teléfono *", value=dict_values['telefono'])
+    fecha_nacimiento = right1.date_input("Fecha Nacimiento", value=dict_values['fecha_nacimiento'])
     email = st.text_input("Correo Electrónico", value=dict_values['email'])
     st.write('\* Campos obligatorios')
     if st.button("Guardar", key=5):
         cliente = Gestion_Clientes()
-        cliente.editar_cliente(dict_values['id'] ,str(cedula), nombre, telefono, fecha_nacimiento, email)
+        if agree:
+            cliente.editar_cliente(dict_values['id'] ,str(cedula), nombre, telefono, fecha_nacimiento, email, cedula_nueva)
+        else:
+            cliente.editar_cliente(dict_values['id'] ,str(cedula), nombre, telefono, fecha_nacimiento, email)
         st.success("Se ha actualizado exitosamente datos del cliente")
         sleep(1)
         st.rerun()
