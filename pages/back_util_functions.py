@@ -88,6 +88,9 @@ class Gestion_Vehiculos:
     
     def dataframe_front(self, cedula):
         self.cargar_dataframe()
+        self.vehiculo_df = self.vehiculo_df[self.vehiculo_df['propietario'] == cedula]
+        self.vehiculo_df = self.vehiculo_df[['placa','tipo_vehiculo','categoria','marca','modelo','cilindraje']]
+        """
         clientes = Gestion_Clientes()
         df_clientes = clientes.cargar_dataframe()
         df_clientes = df_clientes[['cedula', 'nombre']]
@@ -95,11 +98,11 @@ class Gestion_Vehiculos:
                                              left_on='propietario',
                                              right_on='cedula',
                                              how='left')
-        df_vehiculo = df_vehiculo[df_vehiculo['cedula'] == cedula]
+        df_vehiculo = df_vehiculo.dropna(subset=['placa'])
         df_vehiculo.set_index(self.vehiculo_df.index, inplace=True)
         df_vehiculo.drop(columns=['cedula'], inplace=True)
-        
-        return df_vehiculo
+        """
+        return self.vehiculo_df
     
     def existe_vehiculo(self, placa):
         vehiculo = self.vehiculo_df[self.vehiculo_df["placa"] == placa]

@@ -162,45 +162,27 @@ if "btn_agregar_vehiculo" not in st.session_state:
         else:
             btn_agregar_vehiculo(dict_clientes_values)
 
-#st.write(dict_clientes_values)
-st.header('Administración de Vehículos')
+st.write('_*Seleccione un cliente para ver sus vehículos*_')
+if dict_clientes_values is not None:
+    st.subheader(f"Vehículos de *{dict_clientes_values['nombre']}*")
 
-if not st.session_state.df_state_vehiculos:
-    df_vehiculos = Gestion_Vehiculos()
-    st.session_state.df_vehiculos = df_vehiculos.dataframe_front()
-    st.session_state.df_state_vehiculos = True
+    if not st.session_state.df_state_vehiculos:
+        df_vehiculos = Gestion_Vehiculos()
+        st.session_state.df_vehiculos = df_vehiculos.dataframe_front(dict_clientes_values['cedula'])
+        st.session_state.df_state_vehiculos = True
 
-event_vehiculos = st.dataframe(
-    st.session_state.df_vehiculos,
-    key="vehiculos",
-    on_select="rerun",
-    selection_mode=['single-row'],
-    column_config={
-        "id": st.column_config.TextColumn("ID", default="st."),
-        "placa": st.column_config.TextColumn("Placa", default="st."),
-        "tipo_vehiculo": st.column_config.TextColumn("Tipo Vehiculo", default="st."),
-        "categoria": st.column_config.TextColumn("Categoria", default="st."),
-        "marca": st.column_config.TextColumn("Marca", default="st."),
-        "modelo": st.column_config.TextColumn("Modelo", default="st."),
-        "cilindraje": st.column_config.TextColumn("Cilindraje", default="st."),
-        "propietario": st.column_config.TextColumn("Cédula Propietario", default="st."),
-        "nombre": st.column_config.TextColumn("Propietario", default="st.")
-    },
-    height= 250
-)
-
-try:
-    dict_vehiculos_values = {
-        'id' : event_vehiculos.selection.rows[0]+1,
-        'placa' : st.session_state.df_vehiculos.iloc[event_vehiculos.selection.rows].iat[0, 0],
-        'categoria' : str(st.session_state.df_vehiculos.iloc[event_vehiculos.selection.rows].iat[0, 1]),
-        'tipo' : str(st.session_state.df_vehiculos.iloc[event_vehiculos.selection.rows].iat[0, 2]),
-        'marca' : str(st.session_state.df_vehiculos.iloc[event_vehiculos.selection.rows].iat[0, 3]),
-        'modelo' : str(st.session_state.df_vehiculos.iloc[event_vehiculos.selection.rows].iat[0, 4]),
-        'cilindraje' : str(st.session_state.df_vehiculos.iloc[event_vehiculos.selection.rows].iat[0, 5]),
-        'propietario' : str(st.session_state.df_vehiculos.iloc[event_vehiculos.selection.rows].iat[0, 6])
-    }
-except IndexError:
-    dict_vehiculos_values = None
-
-st.write(dict_vehiculos_values)
+    event_vehiculos = st.dataframe(
+        st.session_state.df_vehiculos,
+        key="vehiculos",
+        on_select="rerun",
+        selection_mode=['single-row'],
+        column_config={
+            "placa": st.column_config.TextColumn("Placa", default="st."),
+            "tipo_vehiculo": st.column_config.TextColumn("Tipo Vehiculo", default="st."),
+            "categoria": st.column_config.TextColumn("Categoria", default="st."),
+            "marca": st.column_config.TextColumn("Marca", default="st."),
+            "modelo": st.column_config.TextColumn("Modelo", default="st."),
+            "cilindraje": st.column_config.TextColumn("Cilindraje", default="st."),
+        },
+        hide_index=True
+    )

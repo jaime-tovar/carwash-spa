@@ -1,5 +1,5 @@
 id,nombre,cedula,fecha_nacimiento,telefono,email
-1,Juan ,123456789,1990-01-15,604556723,juan.perez@edu.co.com
+1,Juan,123456789,1990-01-15,604556723,juan.perez@edu.co.com
 2,Maria López,987654321,1985-06-20,3007654321,maria.lopez@example.com
 3,Carlos Gómez,456789123,1992-03-10,3004567890,carlos.gomez@example.com
 4,Ana Torres,654321987,1995-12-05,3006543219,ana.torres@example.com
