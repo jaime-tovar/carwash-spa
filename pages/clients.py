@@ -198,7 +198,7 @@ if dict_clientes_values is not None:
 
     if not st.session_state.df_state_vehiculos:
         df_vehiculos = Gestion_Vehiculos()
-        st.session_state.df_vehiculos = df_vehiculos.dataframe_front(dict_clientes_values['cedula'])
+        st.session_state.df_vehiculos = df_vehiculos.dataframe_front(str(dict_clientes_values['id']))
         st.session_state.df_state_vehiculos = True
 
     event_vehiculos = st.dataframe(

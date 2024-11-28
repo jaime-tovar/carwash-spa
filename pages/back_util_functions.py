@@ -27,6 +27,15 @@ class Gestion_Clientes:
             
         return self.cliente_df
     
+    def cargar_datos(self):
+        try:
+            self.cliente_df = pd.read_csv(self.archivo_csv, dtype=str)  # Carga los datos desde el archivo csv en un DataFrame
+        except FileNotFoundError:
+            # Si el DataFrame no existe, crea un nuevo DataFrame con las columnas dadas
+            self.cliente_df = pd.DataFrame(columns=['id','nombre','cedula','fecha_nacimiento','telefono','email'])
+            
+        return self.cliente_df
+    
     def existe_cliente(self, cedula):
         self.cargar_dataframe()
         cliente = self.cliente_df[self.cliente_df["cedula"] == cedula]
@@ -76,6 +85,12 @@ class Gestion_Clientes:
             ]
         self.cargar_a_csv()
 
+    def listado_clientes(self):
+        self.cargar_datos()
+        self.cliente_df['cc_nombre'] = self.cliente_df['cedula'] + ' | ' + self.cliente_df['nombre']
+        dict_cc_nombre = dict(zip(self.cliente_df['cc_nombre'], self.cliente_df['id']))
+        return dict_cc_nombre
+        
 class Gestion_Vehiculos:
     def __init__(self):  # Inicializamos el archivo donde se van a guardar los datos
         self.archivo_csv='pages/data/vehicles.csv'
@@ -91,11 +106,36 @@ class Gestion_Vehiculos:
             
         return self.vehiculo_df
     
-    def dataframe_front(self, cedula):
+    def cargar_datos(self):
+        try:
+            self.vehiculo_df = pd.read_csv(self.archivo_csv, dtype=str)# Carga los datos desde el archivo csv en un DataFrame
+        except FileNotFoundError:
+            # Si el DataFrame no existe, crea un nuevo DataFrame con las columnas dadas
+            self.vehiculo_df = pd.DataFrame(columns=['id','placa', 'tipo_vehiculo', 'categoria', 'marca', 'modelo', 'cilindraje', 'propietario'])
+            
+        return self.vehiculo_df
+    
+    def dataframe_front(self, id_cliente):
         self.cargar_dataframe()
-        self.vehiculo_df = self.vehiculo_df[self.vehiculo_df['propietario'] == cedula]
+        self.vehiculo_df = self.vehiculo_df[self.vehiculo_df['propietario'] == id_cliente]
         self.vehiculo_df = self.vehiculo_df[['placa','tipo_vehiculo','categoria','marca','modelo','cilindraje']]
         return self.vehiculo_df
+    
+    def dataframe_front_gestion(self):
+        self.cargar_datos()
+        self.vehiculo_df = self.vehiculo_df.rename(columns={'id': 'id_vehiculo'})
+        clientes = Gestion_Clientes()
+        df_clientes = clientes.cargar_datos()
+        df_clientes = df_clientes[['id','cedula', 'nombre']]
+        df_vehiculo = self.vehiculo_df.merge(df_clientes,
+                                             left_on='propietario',
+                                             right_on='id',
+                                             how='left')
+        df_vehiculo.drop(columns=['propietario','id'], inplace=True)
+        df_vehiculo = df_vehiculo.rename(columns={'id_vehiculo': 'id'})
+        df_vehiculo.set_index('id', inplace=True)
+        
+        return df_vehiculo
     
     def existe_vehiculo(self, placa):
         vehiculo = self.vehiculo_df[self.vehiculo_df["placa"] == placa]
@@ -134,12 +174,16 @@ class Gestion_Vehiculos:
         
         self.cargar_a_csv()
         
-    def editar_vehiculo(self, id, placa, tipo_vehiculo, categoria, marca, modelo, cilindraje, propietario):
+    def editar_vehiculo(self, id, placa, tipo_vehiculo, categoria, marca, modelo, cilindraje, propietario, placa_nueva=None):
         self.cargar_dataframe()
         self.vehiculo_df = self.vehiculo_df.astype(str)
+        if placa_nueva is not None:
+            placa_input = placa_nueva
+        else:
+            placa_input = placa
         if id in self.vehiculo_df.index:
             self.vehiculo_df.loc[id, ['placa', 'tipo_vehiculo', 'categoria', 'marca', 'modelo', 'cilindraje', 'propietario']] = [
-                placa, categoria, tipo, marca, modelo, cilindraje, propietario
+                placa_input, tipo_vehiculo, categoria, marca, modelo, cilindraje, propietario
             ]
         self.cargar_a_csv()
     
