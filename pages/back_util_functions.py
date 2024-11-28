@@ -356,7 +356,8 @@ class Gestion_Servicios:
             'promocion' : None,
             'descuento' : None,
             'iva' : None,
-            'total' : None
+            'total' : None,
+            'metodo_pago' : None
         }])
         
         df_facturas = pd.concat([df_facturas, df_factura_in])
@@ -364,6 +365,17 @@ class Gestion_Servicios:
         df_facturas.to_csv(path_or_buf=self.facturas, sep=",", index=False)
         
         return
+    
+    def min_max_date(self):
+        df_facturas = pd.read_csv(self.facturas, dtype=str)
+        min_date = datetime.datetime.strptime(str(df_facturas['emision'].min()), '%Y-%m-%d').date()
+        max_date = datetime.datetime.strptime(str(df_facturas['emision'].max()), '%Y-%m-%d').date()
+        return min_date, max_date
+    
+    def diccionario_tipos_vehiculos_servicios(self):
+        df = pd.read_csv(self.archivo_csv)
+        diccionario = df.groupby('tipo_vehiculo')['servicio'].apply(list).to_dict()
+        return diccionario
 
 class Gestion_Usuarios:
     def __init__(self):  # Inicializamos el archivo donde se van a guardar los datos
