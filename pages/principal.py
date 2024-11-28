@@ -54,9 +54,11 @@ servicios_adicionales = st.multiselect(
     key='selected_aditionals_services')
 
 dict_temp_services =  {
+    'id_vehiculo' : placas[vehiculo][5],
     'placa' : vehiculo,
     'tipo_vehiculo': placas[vehiculo][2],
     'categoria': placas[vehiculo][3],
+    'id_cliente' : placas[vehiculo][4],
     'cedula' : placas[vehiculo][0],
     'servicio': servicios+servicios_adicionales
 }

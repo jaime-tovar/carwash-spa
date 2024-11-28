@@ -131,7 +131,7 @@ def btn_agregar_vehiculo(dict_values):
     st.write('\* Campos obligatorios')
     if st.button("Guardar", key=3, type="primary"):
         vehiculo = Gestion_Vehiculos()
-        vehiculo.registrar_vehiculo(placa, tipo_vehiculo, categoria, marca, modelo, cilindraje, dict_values['cedula'])
+        vehiculo.registrar_vehiculo(placa, tipo_vehiculo, categoria, marca, modelo, cilindraje, dict_values['id'])
         st.success("Vehículo creado existosamente")
         sleep(1)
         st.rerun()

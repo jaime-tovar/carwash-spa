@@ -193,16 +193,19 @@ class Gestion_Vehiculos:
         return diccionario
     
     def listado_placas_clientes(self):
-        self.cargar_dataframe()
+        self.cargar_datos()
+        self.vehiculo_df = self.vehiculo_df.rename(columns={'id': 'id_vehiculo'})
         clientes = Gestion_Clientes()
-        df_clientes = clientes.cargar_dataframe()
-        df_clientes = df_clientes[['cedula', 'nombre']]
+        df_clientes = clientes.cargar_datos()
+        df_clientes = df_clientes[['id', 'cedula', 'nombre']]
         df_vehiculo = self.vehiculo_df.merge(df_clientes,
                                              left_on='propietario',
-                                             right_on='cedula',
+                                             right_on='id',
                                              how='left')
-        diccionario_placas = {row['placa']: [row['cedula'], row['nombre'], row['tipo_vehiculo'], row['categoria']] 
-                              for _, row in df_vehiculo.iterrows()}
+        diccionario_placas = {
+            row['placa']: [row['cedula'], row['nombre'], row['tipo_vehiculo'], row['categoria'], row['id'], row['id_vehiculo']]
+            for _, row in df_vehiculo.iterrows()
+            }
         return diccionario_placas
     
     def diccionario_cc_categorias(self):
@@ -342,8 +345,8 @@ class Gestion_Servicios:
         fecha_ingreso, hora_ingreso = obtener_fecha_hora()
         df_factura_in = pd.DataFrame([{
             'id' : id_max_facturas,
-            'placa' : dict_in['placa'],
-            'cedula' : dict_in['cedula'],
+            'placa' : dict_in['id_vehiculo'],
+            'cedula' : dict_in['id_cliente'],
             'emision' : None,
             'fecha_ingreso' : fecha_ingreso,
             'hora_ingreso' : hora_ingreso,

@@ -64,7 +64,7 @@ def btn_editar_vehiculo(dict_values):
             vehiculo.editar_vehiculo(dict_values['id'], placa, tipo_vehiculo, categoria, marca, modelo, cilindraje, dict_cc_nombre[propietario], placa_nueva)
         else:
             vehiculo.editar_vehiculo(dict_values['id'], placa, tipo_vehiculo, categoria, marca, modelo, cilindraje, dict_cc_nombre[propietario])
-        st.success("Vehículo creado existosamente")
+        st.success("Vehículo editado existosamente")
         sleep(1)
         st.rerun()
 
