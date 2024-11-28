@@ -3,7 +3,7 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from time import sleep
 from navigation import make_sidebar
-from pages.back_util_functions import Gestion_Clientes, Gestion_Vehiculos
+from pages.back_util_functions import Gestion_Clientes, Gestion_Vehiculos, Historiales
 from pages.front_util_functions import validate_email, validate_cedula, validate_celular
 
 make_sidebar()
@@ -216,3 +216,20 @@ if dict_clientes_values is not None:
         },
         hide_index=True
     )
+
+
+st.header("Historial Clientes")
+
+clientes = Gestion_Clientes()
+dict_cc_ids = clientes.listado_clientes()
+cedula = st.selectbox('Seleccione la cedula del cliente', options=dict_cc_ids.keys())
+historial = Historiales()
+st.session_state.historial_clientes = historial.historial_clientes(str(dict_cc_ids[cedula]))
+if st.session_state.historial_clientes.empty:
+    st.warning("Este cliente no tiene historial")
+else:
+    st.dataframe(st.session_state.historial_clientes, hide_index= True)
+
+
+
+

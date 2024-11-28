@@ -213,6 +213,12 @@ class Gestion_Vehiculos:
         cc_dict = df[df['tipo_vehiculo'] == 'Moto']
         cc_dict = cc_dict.set_index('categoria')[['cc_min', 'cc_max']].apply(list, axis=1).to_dict()
         return cc_dict
+    
+    def listado_placas(self):
+        self.cargar_datos()
+        self.vehiculo_df['placa'] = self.vehiculo_df['placa']
+        dict_cc_placas = dict(zip(self.vehiculo_df['placa'], self.vehiculo_df['id']))
+        return dict_cc_placas
 
 class Gestion_Servicios:
     def __init__(self):  # Inicializamos el archivo donde se van a guardar los datos
@@ -477,5 +483,30 @@ class Billing:
         
         return self.df_detalle_factura
         
-        
+class Historiales:
+    def __init__(self):
+        self.facturas = 'pages/data/facturas.csv'
+        self.clientes = 'pages/data/clientes.csv'
+        self.vehiculos = 'pages/data/vehicles.csv'
+    
+    def cargar_dataframe(self):
+        self.df_facturas = pd.read_csv(self.facturas, dtype=str)
+        self.df_clientes = pd.read_csv(self.clientes, dtype=str)
+        self.df_vehiculos = pd.read_csv(self.vehiculos, dtype=str)
+        return self.df_facturas,self.df_clientes,self.df_vehiculos
+    
+    def historial_clientes(self,id_cliente):
+        self.cargar_dataframe()
+        self.df_historial_cliente = self.df_facturas[self.df_facturas['id_cliente'] == id_cliente]
+        return self.df_historial_cliente
+
+    def historial_vehiculos(self,id_vehiculo):
+        self.cargar_dataframe()
+        self.df_historial_vehiculo = self.df_facturas[self.df_facturas['id_vehiculo'] == id_vehiculo]
+        return self.df_historial_vehiculo
+
+
+
+
+
     
