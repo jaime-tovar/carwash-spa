@@ -1,4 +1,4 @@
-id,placa,cedula,emision,fecha_ingreso,hora_ingreso,fecha_salida,hora_salida,subtotal,promocion,descuento,iva,total,metodo_pago
+id,id_vehiculo,id_cliente,emision,fecha_ingreso,hora_ingreso,fecha_salida,hora_salida,subtotal,promocion,descuento,iva,total,metodo_pago
 1,9,7,2024-11-27,2024-11-27,08:39:24 PM,,,230000,,,,,
 2,1,1,,2024-11-27,09:54:59 PM,,,213000,,,,,
 3,5,5,,2024-11-27,09:55:08 PM,,,163000,,,,,

@@ -28,6 +28,7 @@ def make_sidebar():
         if st.session_state.get("logged_in", False):
             if st.session_state.role == 'admin':
                 st.page_link("pages/principal.py", label="Principal", icon="🏠")
+                st.page_link("pages/billing.py", label="Facturación", icon="💵")
                 st.page_link("pages/clients.py", label="Gestión Clientes", icon="👨🏻‍💼")
                 st.page_link("pages/vehicles.py", label="Gestión Vehículos", icon="🚘")
                 st.page_link("pages/services.py", label="Gestión Servicios", icon="📦")
@@ -36,7 +37,10 @@ def make_sidebar():
 
             if st.session_state.role == 'usuario':
                 st.page_link("pages/principal.py", label="Principal", icon="🏠")
+                st.page_link("pages/billing.py", label="Facturación", icon="💵")
                 st.page_link("pages/clients.py", label="Gestión Clientes", icon="👨🏻‍💼")
+                st.page_link("pages/vehicles.py", label="Gestión Vehículos", icon="🚘")
+                st.page_link("pages/reports.py", label="Reportes", icon="📋")
 
             st.write("")
             st.write("")

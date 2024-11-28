@@ -345,8 +345,8 @@ class Gestion_Servicios:
         fecha_ingreso, hora_ingreso = obtener_fecha_hora()
         df_factura_in = pd.DataFrame([{
             'id' : id_max_facturas,
-            'placa' : dict_in['id_vehiculo'],
-            'cedula' : dict_in['id_cliente'],
+            'id_vehiculo' : dict_in['id_vehiculo'],
+            'id_cliente' : dict_in['id_cliente'],
             'emision' : None,
             'fecha_ingreso' : fecha_ingreso,
             'hora_ingreso' : hora_ingreso,
@@ -368,6 +368,8 @@ class Gestion_Servicios:
     
     def min_max_date(self):
         df_facturas = pd.read_csv(self.facturas, dtype=str)
+        filtro = df_facturas['emision'].notna() & (df_facturas['emision'] != '')
+        df_facturas = df_facturas[filtro]
         min_date = datetime.datetime.strptime(str(df_facturas['emision'].min()), '%Y-%m-%d').date()
         max_date = datetime.datetime.strptime(str(df_facturas['emision'].max()), '%Y-%m-%d').date()
         return min_date, max_date
@@ -418,3 +420,62 @@ class Gestion_Usuarios:
         self.usuario_df = pd.concat([self.usuario_df, nuevo_usuario_df])
         
         self.cargar_a_csv()
+        
+class Billing:
+    def __init__(self):  # Inicializamos el archivo donde se van a guardar los datos
+        self.detalle_factura = 'pages/data/detalle_factura.csv'
+        self.facturas = 'pages/data/facturas.csv'
+    
+    def crear_dataframe(self, facturas=False, detalles_facturas=False):
+        
+        if facturas:
+            try:
+                self.df_facturas = pd.read_csv(self.facturas, dtype=str)
+            except FileNotFoundError:
+                self.df_facturas = pd.DataFrame(columns=['id','placa','cedula','emision','fecha_ingreso',
+                                                        'hora_ingreso','fecha_salida','hora_salida','subtotal',
+                                                        'promocion','descuento','iva','total','metodo_pago'])
+                
+            return self.df_facturas
+        
+        if detalles_facturas:
+            try:
+                self.df_detalle_factura = pd.read_csv(self.facturas, dtype=str)
+            except FileNotFoundError:
+                self.df_detalle_factura = pd.DataFrame(columns=['id','id_factura','servicio','precio','realizado'])
+                
+            return self.df_detalle_factura
+        
+    def facturas_activas(self):
+        self.crear_dataframe(facturas=True)
+        filtro = self.df_facturas['emision'].isna() | (self.df_facturas['emision'] == '')
+        self.df_facturas = self.df_facturas[filtro]
+        
+        df_vehiculos = Gestion_Vehiculos()
+        df_vehiculos = df_vehiculos.cargar_datos()[['id','placa','tipo_vehiculo']]
+        df_vehiculos = df_vehiculos.rename(columns={'id':'id_vehiculo'})
+        
+        df_clientes = Gestion_Clientes()
+        df_clientes = df_clientes.cargar_datos()[['id','cedula','nombre']]
+        df_clientes = df_clientes.rename(columns={'id':'id_cliente'})
+        
+        self.df_facturas = self.df_facturas.merge(df_vehiculos, how='left',
+                                                  left_on='id_vehiculo', right_on='id_vehiculo')
+        self.df_facturas = self.df_facturas.merge(df_clientes, how='left',
+                                                  left_on='id_cliente', right_on='id_cliente')
+        
+        self.df_facturas = self.df_facturas.rename(columns={'id':'id_factura'})
+        
+        self.df_facturas = self.df_facturas[['id_factura','placa','cedula','nombre','fecha_ingreso','hora_ingreso',
+                                             'subtotal','promocion','descuento','iva','total']]
+        
+        return self.df_facturas
+    
+    def detalles_factura(self, id_factura):
+        self.crear_dataframe(detalles_facturas=True)
+        self.df_detalle_factura = self.df_detalle_factura[self.df_detalle_factura['id_factura'] == id_factura]
+        
+        return self.df_detalle_factura
+        
+        
+    
