@@ -157,6 +157,7 @@ if st.session_state.role == 'admin':
         st.download_button(
             label = "Descargar Historial Vehiculos",
             data = archivo_excel.getvalue(),
-            file_name= "historial_excel.xlsx",
-            mime= "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            file_name= f"historial_vehiculo_{id_vehiculo}.xlsx",
+            mime= "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            type='primary'
         )
