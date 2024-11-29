@@ -39,7 +39,7 @@ def btn_agregar():
     telefono = left.text_input("Celular / Teléfono *")
     if telefono:
         if not validate_celular(telefono):
-            st.error("Número de cellular inválido")
+            st.error("Número de celular no válido")
             st.session_state.validaciones_data = False
         else:
             st.session_state.validaciones_data = True
