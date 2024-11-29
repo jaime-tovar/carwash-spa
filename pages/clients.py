@@ -10,7 +10,10 @@ make_sidebar()
 # Variables temporales de sesion
 st.session_state.df_state_clientes = False
 st.session_state.df_state_vehiculos = False
-st.session_state.validaciones_data = True
+st.session_state.validaciones_data_cedula = True
+st.session_state.validaciones_data_telefono = True
+st.session_state.validaciones_data_email = True
+st.session_state.validaciones_data_placa = True
 
 if "input_text" not in st.session_state:
     st.session_state.input_text = ""
@@ -24,15 +27,15 @@ def btn_agregar():
     if cedula:
         if not validate_cedula(cedula):
             st.error("La cédula no es válida")
-            st.session_state.validaciones_data = False
+            st.session_state.validaciones_data_cedula = False
         else:
-            st.session_state.validaciones_data = True
+            st.session_state.validaciones_data_cedula = True
         cliente_cedula = Gestion_Clientes()
         if cliente_cedula.existe_cliente(cedula):
             st.warning("Este cédula ya se encuentra en el sistema")
-            st.session_state.validaciones_data = False
+            st.session_state.validaciones_data_cedula = False
         else:
-            st.session_state.validaciones_data = True
+            st.session_state.validaciones_data_cedula = True
     
     nombre = st.text_input("Nombre *")
     left, right = st.columns(2)
@@ -40,22 +43,22 @@ def btn_agregar():
     if telefono:
         if not validate_celular(telefono):
             st.error("Número de celular no válido")
-            st.session_state.validaciones_data = False
+            st.session_state.validaciones_data_telefono = False
         else:
-            st.session_state.validaciones_data = True
+            st.session_state.validaciones_data_telefono = True
     
     fecha_nacimiento = right.date_input("Fecha Nacimiento", max_value= datetime.today(), min_value= datetime.today() - relativedelta(years=34) )
     email = st.text_input("Correo Electrónico")
     if email:
         if not validate_email(email):
             st.error("El correo no es válido")
-            st.session_state.validaciones_data = False
+            st.session_state.validaciones_data_email = False
         else:
-            st.session_state.validaciones_data = True
+            st.session_state.validaciones_data_email = True
     
     st.write('\* Campos obligatorios')
     if st.button("Guardar", key=3):
-        if st.session_state.validaciones_data:
+        if st.session_state.validaciones_data_email and st.session_state.validaciones_data_telefono and st.session_state.validaciones_data_cedula:
             cliente = Gestion_Clientes()
             cliente.registrar_cliente(cedula, nombre, telefono, fecha_nacimiento, email)
             st.success("Cliente creado existosamente")
@@ -75,39 +78,64 @@ def btn_editar(dict_values):
         left, right = st.columns(2)
         cedula_ant = left.text_input("Cédula anterior", value=dict_values['cedula'], disabled=True)
         cedula_nueva = right.text_input("Cédula nueva")
-        if not validate_cedula(cedula_nueva):
-            st.error("La cédula no es válida")
-            st.session_state.validaciones_data = False
-        else:
-            st.session_state.validaciones_data = True
-        cliente_cedula = Gestion_Clientes()
-        if cliente_cedula.existe_cliente(cedula_nueva):
-            st.warning("Este cédula ya se encuentra en el sistema")
-            st.session_state.validaciones_data = False
-        else:
-            st.session_state.validaciones_data = True
+        if cedula_nueva:
+            if not validate_cedula(cedula_nueva):
+                st.error("La cédula no es válida")
+                st.session_state.validaciones_data_cedula = False
+            else:
+                st.session_state.validaciones_data_cedula = True
+            cliente_cedula = Gestion_Clientes()
+            if cliente_cedula.existe_cliente(cedula_nueva):
+                st.warning("Este cédula ya se encuentra en el sistema")
+                st.session_state.validaciones_data_cedula = False
+            else:
+                st.session_state.validaciones_data_cedula = True
     nombre = st.text_input("Nombre *", value=dict_values['nombre'])
     left1, right1 = st.columns(2)
     telefono = left1.text_input("Teléfono *", value=dict_values['telefono'])
+    if telefono:
+        if not validate_celular(telefono):
+            st.error("Número de celular no válido")
+            st.session_state.validaciones_data_telefono = False
+        else:
+            st.session_state.validaciones_data_telefono = True
     fecha_nacimiento = right1.date_input("Fecha Nacimiento", value=dict_values['fecha_nacimiento'])
     email = st.text_input("Correo Electrónico", value=dict_values['email'])
-    st.write('\* Campos obligatorios')
-    if st.button("Guardar", key=5):
-        cliente = Gestion_Clientes()
-        if agree:
-            cliente.editar_cliente(dict_values['id'] ,str(cedula), nombre, telefono, fecha_nacimiento, email, cedula_nueva)
+    if email:
+        if not validate_email(email):
+            st.error("El correo no es válido")
+            st.session_state.validaciones_data_email = False
         else:
-            cliente.editar_cliente(dict_values['id'] ,str(cedula), nombre, telefono, fecha_nacimiento, email)
-        st.success("Se ha actualizado exitosamente datos del cliente")
-        sleep(1)
-        st.rerun()
+            st.session_state.validaciones_data_email = True
+    st.write('\* Campos obligatorios')
+    if st.button("Actualizar", key=5):
+        if st.session_state.validaciones_data_email and st.session_state.validaciones_data_telefono and st.session_state.validaciones_data_cedula:
+            cliente = Gestion_Clientes()
+            if agree:
+                cliente.editar_cliente(dict_values['id'] ,str(cedula), nombre, telefono, fecha_nacimiento, email, cedula_nueva)
+            else:
+                cliente.editar_cliente(dict_values['id'] ,str(cedula), nombre, telefono, fecha_nacimiento, email)
+            st.success("Se ha actualizado exitosamente datos del cliente")
+            sleep(1)
+            st.rerun()
+        else:
+            st.error('Datos incorrectos')
 
 @st.dialog("Agregar vehículo a cliente")
 def btn_agregar_vehiculo(dict_values):
     left0, right0 = st.columns(2)
     placa = left0.text_input("Placa *", key="input_text", on_change=update_text)
-    if placa and len(placa) != 6:
-        left0.warning('Ingrese una placa válida')
+    if placa:
+        if len(placa) != 6:
+            st.error('Ingrese una placa válida')
+            st.session_state.validaciones_data_placa = False
+        else:
+            vehiculo_placa = Gestion_Vehiculos()
+            if vehiculo_placa.existe_vehiculo(placa):
+                st.warning("Esta placa ya se encuentra en el sistema")
+                st.session_state.validaciones_data_placa = False
+            else:
+                st.session_state.validaciones_data_placa = True  
     propietario = right0.text_input("Propietario",
                                     placeholder=f"{dict_values['cedula']} | {dict_values['nombre']}",
                                     disabled=True)
@@ -129,12 +157,15 @@ def btn_agregar_vehiculo(dict_values):
         cilindraje = st.number_input("Cilindraje *", min_value=600,
                                      step=5, format='%d')
     st.write('\* Campos obligatorios')
-    if st.button("Guardar", key=3, type="primary"):
-        vehiculo = Gestion_Vehiculos()
-        vehiculo.registrar_vehiculo(placa, tipo_vehiculo, categoria, marca, modelo, cilindraje, dict_values['id'])
-        st.success("Vehículo creado existosamente")
-        sleep(1)
-        st.rerun()
+    if st.button("Agregar vehículo", key=3, type="primary"):
+        if st.session_state.validaciones_data_placa:
+            vehiculo = Gestion_Vehiculos()
+            vehiculo.registrar_vehiculo(placa, tipo_vehiculo, categoria, marca, modelo, cilindraje, dict_values['id'])
+            st.success("Vehículo creado existosamente")
+            sleep(1)
+            st.rerun()
+        else:
+            st.error('Datos incorrectos')
         
 st.header('Administración de Clientes')
 
