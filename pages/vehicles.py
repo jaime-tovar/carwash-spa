@@ -151,3 +151,11 @@ if st.session_state.role == 'admin':
             format="YYYY/MM/DD",
         )
         st.dataframe(st.session_state.historial_vehiculos,hide_index= True)
+
+        archivo_excel = historial.generar_excel(st.session_state.historial_vehiculos)
+        st.download_button(
+            label = "Descargar Historial Vehiculos",
+            data = archivo_excel.getvalue(),
+            file_name= "historial_excel.xlsx",
+            mime= "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
