@@ -1,7 +1,7 @@
 id,id_factura,servicio,precio,realizado
 1,1,Lavada de motor,30000,True
 2,1,Polarizado,200000,True
-3,2,Lavada Sencilla,33000,True
+3,2,Lavada Sencilla,33000,False
 4,2,PPF,100000,True
 5,2,Restauración de mofle negro,80000,True
 6,3,Lavada Completa,43000,True
@@ -12,7 +12,7 @@ id,id_factura,servicio,precio,realizado
 11,6,Lavada Completa,33000,True
 12,6,Restauración de mofle cromada,120000,True
 13,7,Lavada Completa,47000,True
-14,7,PPF,200000,True
-15,7,Recubrimiento ceramico,300000,True
-16,7,Restauración de mofle cromada,120000,True
-17,7,Restauración de mofle negro,80000,True
+14,7,PPF,200000,False
+15,7,Recubrimiento ceramico,300000,False
+16,7,Restauración de mofle cromada,120000,False
+17,7,Restauración de mofle negro,80000,False

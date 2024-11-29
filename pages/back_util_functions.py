@@ -440,7 +440,7 @@ class Billing:
         
         if detalles_facturas:
             try:
-                self.df_detalle_factura = pd.read_csv(self.facturas, dtype=str)
+                self.df_detalle_factura = pd.read_csv(self.detalle_factura, dtype=str)
             except FileNotFoundError:
                 self.df_detalle_factura = pd.DataFrame(columns=['id','id_factura','servicio','precio','realizado'])
                 
@@ -475,7 +475,58 @@ class Billing:
         self.crear_dataframe(detalles_facturas=True)
         self.df_detalle_factura = self.df_detalle_factura[self.df_detalle_factura['id_factura'] == id_factura]
         
+        def formatear_precio(valor):
+            return f"$ {valor:,.0f}"
+        
+        self.df_detalle_factura['precio_formateado'] = self.df_detalle_factura['precio'].apply(lambda x: formatear_precio(int(x)))
+        
         return self.df_detalle_factura
-        
-        
     
+    def facturar_servicio(self, dict_in):
+        # Obtener los datos de el detalle de factura
+        self.crear_dataframe(detalles_facturas=True)
+        id_factura_a_actualizar = dict_in["id_factura"]
+
+        # Obtener los datos de servicios del diccionario
+        servicios = dict_in["servicios"]
+
+        # Actualizar el detalle de facturas
+        for servicio, precio in servicios["precio"].items():
+            servicio_nombre = servicios["servicio"][servicio]
+            precio_int = int(precio.replace("$", "").replace(",", ""))
+            realizado = servicios["realizado"][servicio]
+
+            # Actualizar las filas correspondientes
+            self.df_detalle_factura.loc[
+                (self.df_detalle_factura["id_factura"] == id_factura_a_actualizar) &
+                (self.df_detalle_factura["servicio"] == servicio_nombre), 
+                ["precio", "realizado"]
+            ] = [precio_int, realizado]
+        
+        self.df_detalle_factura = self.df_detalle_factura.astype(str)
+        # Guarda el DataFrame actualizado en el archivo CSV
+        self.df_detalle_factura.to_csv(path_or_buf=self.detalle_factura, sep=",", index=False)
+        
+        # Obtener los datos de la factura
+        self.crear_dataframe(facturas=True)
+        
+        id_factura = dict_in["id_factura"]
+        fecha_salida, hora_salida = obtener_fecha_hora()
+        
+        self.df_facturas.loc[self.df_facturas["id"] == id_factura,
+                             ["emision","fecha_salida","hora_salida","subtotal",
+                              "descuento", "iva", "total", "metodo_pago"]] = [
+            fecha_salida,
+            fecha_salida,
+            hora_salida,
+            dict_in["subtotal"],
+            dict_in["descuento"],
+            dict_in["iva"],
+            dict_in["total"],
+            dict_in["metodo_pago"]
+        ]
+
+        # Convertir los campos numéricos a su tipo correspondiente
+        self.df_facturas[["subtotal", "descuento", "iva", "total"]] = self.df_facturas[["subtotal", "descuento", "iva", "total"]].astype(float)
+        
+        self.df_facturas.to_csv(path_or_buf=self.facturas, sep=",", index=False)
