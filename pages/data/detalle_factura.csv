@@ -27,6 +27,12 @@ id,id_factura,servicio,precio,realizado
 26,11,Polichada,80000.0,False
 27,11,PPF,3000.0,True
 28,11,Brillo Headers,350000.0,True
-29,12,Lavada Sencilla,33000,True
-30,12,Restauración de mofle cromada,120000,True
-31,12,PPF,40000,True
+29,12,Lavada Sencilla,33000.0,True
+30,12,Restauración de mofle cromada,120000.0,True
+31,12,PPF,40000.0,True
+32,13,Lavada Sencilla,35000,True
+33,13,Vinilos decorativos,400000,True
+34,13,Polichada,60000,True
+35,13,PPF,120000,True
+36,13,Brillo Headers,100000,True
+37,13,Lavada de Cojinería,180000,True

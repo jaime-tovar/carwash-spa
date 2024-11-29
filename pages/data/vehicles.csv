@@ -22,3 +22,4 @@ id,placa,tipo_vehiculo,categoria,marca,modelo,cilindraje,propietario
 21,CJO65J,Moto,Categoria 1,Suzuki,Gixxer 150,155,1
 22,ZMN80C,Moto,Categoria 1,Auteco,Boxer CT 100,100,1
 23,AFS234,Moto,Categoria 4,BMW,123-L,901,2
+24,ABC125,Carro,Liviano,Toyota,Corolla,3000,15

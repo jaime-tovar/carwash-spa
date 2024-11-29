@@ -140,6 +140,7 @@ class Gestion_Vehiculos:
         return df_vehiculo
     
     def existe_vehiculo(self, placa):
+        self.cargar_dataframe()
         vehiculo = self.vehiculo_df[self.vehiculo_df["placa"] == placa]
         if not vehiculo.empty: # Verifica si la placa existe 
             return True
