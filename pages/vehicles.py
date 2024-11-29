@@ -32,14 +32,15 @@ def btn_editar_vehiculo(dict_values):
         placa_nueva = right11.text_input("Placa nueva *", key="input_text", on_change=update_text)
         if placa_nueva:
             if len(placa_nueva) != 6:
-                st.warning('Ingrese una placa válida')
-                st.session_state.validaciones_data = False
-            vehiculo_placa = Gestion_Vehiculos()
-            if vehiculo_placa.existe_vehiculo(placa_nueva):
-                st.warning("Esta placa ya se encuentra en el sistema")
+                st.error('Ingrese una placa válida')
                 st.session_state.validaciones_data = False
             else:
-                st.session_state.validaciones_data = True
+                vehiculo_placa = Gestion_Vehiculos()
+                if vehiculo_placa.existe_vehiculo(placa_nueva):
+                    st.warning("Esta placa ya se encuentra en el sistema")
+                    st.session_state.validaciones_data = False
+                else:
+                    st.session_state.validaciones_data = True
     
     propietario = st.selectbox("Reasignar propietario", dict_cc_nombre.keys(),
                                    index=dict_cc_nombre_index[f"{dict_values['cedula']} | {dict_values['nombre']}"])
