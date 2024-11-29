@@ -1,5 +1,6 @@
 import pandas as pd
 import datetime
+from io import BytesIO
 
 def obtener_fecha_hora():
     # Obtener la fecha y la hora actuales
@@ -138,7 +139,6 @@ class Gestion_Vehiculos:
         return df_vehiculo
     
     def existe_vehiculo(self, placa):
-        self.cargar_dataframe()
         vehiculo = self.vehiculo_df[self.vehiculo_df["placa"] == placa]
         if not vehiculo.empty: # Verifica si la placa existe 
             return True
@@ -582,7 +582,13 @@ class Historiales:
     
         return self.df_historial_vehiculo
     
-    
+    def generar_excel(self,df):
+        output = BytesIO()
+        with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+            df.to_excel(writer, index=False, sheet_name='Historial')
+        output.seek(0)
+        return output
+
     def min_max_date_clientes(self,df):
         filtro = df['emision'].notna() & (df['emision'] != '')
         df = df[filtro]

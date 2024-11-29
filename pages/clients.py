@@ -240,3 +240,11 @@ if st.session_state.role == 'admin':
             format="YYYY/MM/DD",
         )
         st.dataframe(st.session_state.historial_clientes, hide_index= True)
+
+archivo_excel = historial.generar_excel(st.session_state.historial_clientes)
+st.download_button(
+    label = "Descargar Historial Clientes",
+    data = archivo_excel.getvalue(),
+    file_name= "historial_excel.xlsx",
+    mime= "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+)
