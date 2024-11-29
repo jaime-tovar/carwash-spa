@@ -505,6 +505,20 @@ class Historiales:
         self.df_historial_vehiculo = self.df_facturas[self.df_facturas['id_vehiculo'] == id_vehiculo]
         return self.df_historial_vehiculo
 
+    def min_max_date_clientes(self,df):
+        filtro = df['emision'].notna() & (df['emision'] != '')
+        df = df[filtro]
+        min_date = datetime.datetime.strptime(str(df['emision'].min()), '%Y-%m-%d').date()
+        max_date = datetime.datetime.strptime(str(df['emision'].max()), '%Y-%m-%d').date()
+        return min_date, max_date
+    
+    def min_max_date_vehiculo(self,df):
+        filtro = df['emision'].notna() & (df['emision'] != '')
+        df = df[filtro]
+        min_date = datetime.datetime.strptime(str(df['emision'].min()), '%Y-%m-%d').date()
+        max_date = datetime.datetime.strptime(str(df['emision'].max()), '%Y-%m-%d').date()
+        return min_date, max_date
+
 
 
 

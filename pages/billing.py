@@ -72,3 +72,4 @@ except IndexError:
     facturas_activas_selection = None
     
 st.write(facturas_activas_selection)
+
