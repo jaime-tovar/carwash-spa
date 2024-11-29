@@ -168,4 +168,7 @@ else:
 
     if "btn_facturar" not in st.session_state:
         if left.button("Facturar", key=21, type="primary"):
-            btn_facturar(facturas_activas_selection)
+            if facturas_activas_selection is None:
+                st.toast('Primero seleccione un registro')
+            else:
+                btn_facturar(facturas_activas_selection)
