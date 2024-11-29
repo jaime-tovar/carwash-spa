@@ -1,6 +1,7 @@
 import pandas as pd
 import datetime
 from io import BytesIO
+import re
 
 def obtener_fecha_hora():
     # Obtener la fecha y la hora actuales
@@ -243,7 +244,8 @@ class Gestion_Servicios:
         self.service_df.to_csv(path_or_buf=self.archivo_csv, sep=",", index=True)
         
     def registrar_servicio(self, servicio, precio, tipo_vehiculo, categoria, detalles_servicio):
-        detalles_servicio = f'\"{detalles_servicio}\"'
+        detalles_servicio =  re.sub(r"[\r\n]+", "", detalles_servicio)
+        detalles_servicio = f'\"{detalles_servicio.strip()}\"'
         self.cargar_dataframe()
         
         if self.service_df.empty:

@@ -1,6 +1,7 @@
 from navigation import make_sidebar
 import streamlit as st
-from pages.back_util_functions import Gestion_Servicios
+from time import sleep
+from pages.back_util_functions import Gestion_Servicios, Gestion_Vehiculos
 
 make_sidebar()
 
@@ -12,7 +13,7 @@ st.session_state.validaciones_data = True
 def btn_agregar():
     left0, right0 = st.columns(2)
     servicio = left0.text_input("Servicio *")
-    precio = right0.number_input("Precio *", step=1000, format='%d')
+    precio = right0.number_input("Precio *", step=1000, format='%d', min_value=0)
     vehiculos = Gestion_Vehiculos()
     dict_categorias = vehiculos.diccionario_tipos_vehiculos()
     left1, right1 = st.columns(2)
@@ -23,7 +24,7 @@ def btn_agregar():
     if st.button("Guardar", key=123):
         if st.session_state.validaciones_data:
             servicios = Gestion_Servicios()
-            servicios.registrar_servicio(servicio, detalle, tipo_vehiculo, categoria, precio)
+            servicios.registrar_servicio(servicio, precio, tipo_vehiculo, categoria, detalle)
             st.success("Servicio creado existosamente")
             sleep(1)
             st.rerun()
