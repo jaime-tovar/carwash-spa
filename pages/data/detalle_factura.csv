@@ -16,3 +16,5 @@ id,id_factura,servicio,precio,realizado
 15,7,Recubrimiento ceramico,300000,False
 16,7,Restauración de mofle cromada,120000,False
 17,7,Restauración de mofle negro,80000,False
+18,8,Lavada Sencilla,33000,True
+19,8,Restauración de mofle cromada,120000,True

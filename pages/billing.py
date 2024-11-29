@@ -124,46 +124,48 @@ if not st.session_state.df_state_facturas:
     st.session_state.df_facturas_activas = billing_instance.facturas_activas()
     st.session_state.df_state_facturas = True
 
-event_facturas_activas = st.dataframe(
-    st.session_state.df_facturas_activas,
-    key="facturas_activas",
-    on_select="rerun",
-    selection_mode=['single-row'],
-    hide_index=True,
-    column_config={
-        "id_factura": st.column_config.TextColumn("ID", default="st."),
-        "placa": st.column_config.TextColumn("Placa", default="st."),
-        "cedula": st.column_config.TextColumn("Cédula", default="st."),
-        "nombre": st.column_config.TextColumn("Cliente", default="st."),
-        "fecha_ingreso": st.column_config.TextColumn("Fecha Ingreso Vehículo", default="st."),
-        "hora_ingreso": st.column_config.TextColumn("Hora Ingreso Vehículo", default="st."),
-        "subtotal": st.column_config.TextColumn("Subtotal", default="st."),
-        "promocion": st.column_config.TextColumn("Promoción", default="st."),
-        "descuento": st.column_config.TextColumn("descuento", default="st."),
-        "iva" : st.column_config.TextColumn("descuento", default="st."),
-        "total": st.column_config.TextColumn("descuento", default="st.")
-    }
-)
+if st.session_state.df_facturas_activas.empty:
+    st.warning('No hay facturas activas en este momento')
+else:
 
-try:
-    facturas_activas_selection = {
-        'id_factura' : str(st.session_state.df_facturas_activas.iloc[event_facturas_activas.selection.rows].iat[0, 0]),
-        'placa' : str(st.session_state.df_facturas_activas.iloc[event_facturas_activas.selection.rows].iat[0, 1]),
-        'cedula' : str(st.session_state.df_facturas_activas.iloc[event_facturas_activas.selection.rows].iat[0, 2]),
-        'nombre' : str(st.session_state.df_facturas_activas.iloc[event_facturas_activas.selection.rows].iat[0, 3]),
-        'fecha_ingreso' : datetime.strptime(st.session_state.df_facturas_activas.iloc[event_facturas_activas.selection.rows].iat[0, 4], "%Y-%m-%d").date(),
-        'hora_ingreso' : str(st.session_state.df_facturas_activas.iloc[event_facturas_activas.selection.rows].iat[0, 5]),
-        'subtotal' : float(st.session_state.df_facturas_activas.iloc[event_facturas_activas.selection.rows].iat[0, 6]),
-        'promocion' : str(st.session_state.df_facturas_activas.iloc[event_facturas_activas.selection.rows].iat[0, 7]),
-        'descuento' : float(st.session_state.df_facturas_activas.iloc[event_facturas_activas.selection.rows].iat[0, 8]),
-        'iva' : float(st.session_state.df_facturas_activas.iloc[event_facturas_activas.selection.rows].iat[0, 9]),
-        'total' : float(st.session_state.df_facturas_activas.iloc[event_facturas_activas.selection.rows].iat[0, 10])
-    }
-except IndexError:
-    facturas_activas_selection = None
+    event_facturas_activas = st.dataframe(
+        st.session_state.df_facturas_activas,
+        key="facturas_activas",
+        on_select="rerun",
+        selection_mode=['single-row'],
+        hide_index=True,
+        column_config={
+            "id_factura": st.column_config.TextColumn("ID", default="st."),
+            "placa": st.column_config.TextColumn("Placa", default="st."),
+            "cedula": st.column_config.TextColumn("Cédula", default="st."),
+            "nombre": st.column_config.TextColumn("Cliente", default="st."),
+            "fecha_ingreso": st.column_config.TextColumn("Fecha Ingreso Vehículo", default="st."),
+            "hora_ingreso": st.column_config.TextColumn("Hora Ingreso Vehículo", default="st."),
+            "subtotal": st.column_config.TextColumn("Subtotal", default="st."),
+            "promocion": st.column_config.TextColumn("Promoción", default="st."),
+            "descuento": st.column_config.TextColumn("descuento", default="st."),
+            "iva" : st.column_config.TextColumn("descuento", default="st."),
+            "total": st.column_config.TextColumn("descuento", default="st.")
+        }
+    )
 
-st.write(facturas_activas_selection)
+    try:
+        facturas_activas_selection = {
+            'id_factura' : str(st.session_state.df_facturas_activas.iloc[event_facturas_activas.selection.rows].iat[0, 0]),
+            'placa' : str(st.session_state.df_facturas_activas.iloc[event_facturas_activas.selection.rows].iat[0, 1]),
+            'cedula' : str(st.session_state.df_facturas_activas.iloc[event_facturas_activas.selection.rows].iat[0, 2]),
+            'nombre' : str(st.session_state.df_facturas_activas.iloc[event_facturas_activas.selection.rows].iat[0, 3]),
+            'fecha_ingreso' : datetime.strptime(st.session_state.df_facturas_activas.iloc[event_facturas_activas.selection.rows].iat[0, 4], "%Y-%m-%d").date(),
+            'hora_ingreso' : str(st.session_state.df_facturas_activas.iloc[event_facturas_activas.selection.rows].iat[0, 5]),
+            'subtotal' : float(st.session_state.df_facturas_activas.iloc[event_facturas_activas.selection.rows].iat[0, 6]),
+            'promocion' : str(st.session_state.df_facturas_activas.iloc[event_facturas_activas.selection.rows].iat[0, 7]),
+            'descuento' : float(st.session_state.df_facturas_activas.iloc[event_facturas_activas.selection.rows].iat[0, 8]),
+            'iva' : float(st.session_state.df_facturas_activas.iloc[event_facturas_activas.selection.rows].iat[0, 9]),
+            'total' : float(st.session_state.df_facturas_activas.iloc[event_facturas_activas.selection.rows].iat[0, 10])
+        }
+    except IndexError:
+        facturas_activas_selection = None
 
-if "btn_facturar" not in st.session_state:
-    if left.button("Facturar", key=21, type="primary"):
-        btn_facturar(facturas_activas_selection)
+    if "btn_facturar" not in st.session_state:
+        if left.button("Facturar", key=21, type="primary"):
+            btn_facturar(facturas_activas_selection)

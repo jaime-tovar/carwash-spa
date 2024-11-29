@@ -217,32 +217,26 @@ if dict_clientes_values is not None:
         hide_index=True
     )
 
+if st.session_state.role == 'admin':
+    st.header("Historial Clientes")
 
-st.header("Historial Clientes")
+    left,right = st.columns(2)
+    clientes = Gestion_Clientes()
+    dict_cc_ids = clientes.listado_clientes()
+    cedula = left.selectbox('Seleccione la cedula del cliente', options=dict_cc_ids.keys())
+    historial = Historiales()
+    st.session_state.historial_clientes = historial.historial_clientes(str(dict_cc_ids[cedula]))
+    if st.session_state.historial_clientes.empty:
+        st.warning("Este cliente no tiene historial")
+    else:
+        servicios_instance = Historiales()
+        min_date, max_date = servicios_instance.min_max_date_clientes(st.session_state.historial_clientes)
 
-left,right = st.columns(2)
-clientes = Gestion_Clientes()
-dict_cc_ids = clientes.listado_clientes()
-cedula = left.selectbox('Seleccione la cedula del cliente', options=dict_cc_ids.keys())
-historial = Historiales()
-st.session_state.historial_clientes = historial.historial_clientes(str(dict_cc_ids[cedula]))
-if st.session_state.historial_clientes.empty:
-    st.warning("Este cliente no tiene historial")
-else:
-    servicios_instance = Historiales()
-    min_date, max_date = servicios_instance.min_max_date_clientes(st.session_state.historial_clientes)
-
-    d = right.date_input(
-    "Seleccione el rango de fechas",
-        (min_date, max_date),
-        min_date,
-        max_date,
-        format="YYYY/MM/DD",
-    )
-    st.dataframe(st.session_state.historial_clientes, hide_index= True)
-
-
-
-
-
-
+        d = right.date_input(
+        "Seleccione el rango de fechas",
+            (min_date, max_date),
+            min_date,
+            max_date,
+            format="YYYY/MM/DD",
+        )
+        st.dataframe(st.session_state.historial_clientes, hide_index= True)
