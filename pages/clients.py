@@ -276,6 +276,7 @@ if st.session_state.role == 'admin':
         st.download_button(
             label = "Descargar Historial Clientes",
             data = archivo_excel.getvalue(),
-            file_name= "historial_excel.xlsx",
-            mime= "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            file_name= f"historial_cliente_{cedula.replace(' ','').replace('|','_')}.xlsx",
+            mime= "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            type='primary'
         )
