@@ -118,6 +118,7 @@ def btn_facturar(dict_in):
             st.error('Datos incorrectos')
 
 st.header("Facturación")
+st.subheader("Servicios activos")
 
 left, middle, right = st.columns(3)
         
@@ -126,7 +127,7 @@ if not st.session_state.df_state_facturas:
     st.session_state.df_state_facturas = True
 
 if st.session_state.df_facturas_activas.empty:
-    st.warning('No hay facturas activas en este momento')
+    st.warning('No hay servicios acivos para facturar')
 else:
     event_facturas_activas = st.dataframe(
         st.session_state.df_facturas_activas,
@@ -173,15 +174,16 @@ else:
             else:
                 btn_facturar(facturas_activas_selection)
 
-
+# Sección de Reporte Diario
 if not st.session_state.df_state_reporte_diario:
     reporte = Historiales()
-    st.session_state.df_reporte_diario = reporte.emision_actual()
+    st.session_state.df_reporte_diario, df_download = reporte.emision_actual()
     st.session_state.df_state_reporte_diario = True
+
 if st.session_state.df_reporte_diario.empty:
-        st.warning("El dia de aun no se han hecho facturas")
+    st.warning("El dia de hoy aun no se han emitido facturas")
 else:
-    st.header("Reportes diario")
+    st.header("Reporte del dia")
     event_reporte_diario = st.dataframe(
         st.session_state.df_reporte_diario,
         key="id",
@@ -201,4 +203,13 @@ else:
             "total": st.column_config.TextColumn("Total", default="st.")
         },
         hide_index= True
+    )
+    historial = Historiales()
+    archivo_excel = historial.generar_excel_facturas(st.session_state.df_reporte_diario, df_download)
+    st.download_button(
+        label = "Descargar Reporte del Dia",
+        data = archivo_excel.getvalue(),
+        file_name= f"facturas_{datetime.now().strftime('%Y-%m-%d')}.xlsx",
+        mime= "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        type='primary'
     )

@@ -6,6 +6,7 @@ import os
 from PIL import Image
 from pages.back_util_functions import Gestion_Usuarios
 import json
+import webbrowser
 
 
 make_sidebar()
@@ -113,3 +114,12 @@ def configurar():
 
 st.header('Cambiar Logo y Nombre del Lavadero', divider='grey')
 configurar()
+
+pdf_path = "pages/data/manual.pdf"
+
+def abrir_pdf():
+    ruta_absoluta = os.path.abspath(pdf_path)
+    webbrowser.open_new(f"file://{ruta_absoluta}")
+
+if st.button("Manual de Uso"):
+    abrir_pdf()

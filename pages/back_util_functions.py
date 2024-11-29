@@ -583,7 +583,7 @@ class Historiales:
     
         return self.df_historial_vehiculo
     
-    def generar_excel(self,df):
+    def generar_excel(self, df):
         output = BytesIO()
         with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
             df.to_excel(writer, index=False, sheet_name='Historial')
@@ -610,6 +610,9 @@ class Historiales:
         fecha_actual = datetime.datetime.now().date()
         filtro = df['emision'].dt.date == fecha_actual
         self.df_facturas = self.df_facturas[filtro]
+        
+        detalles_facturas = Billing()
+        df_detalle_factura = detalles_facturas.crear_dataframe(detalles_facturas=True)
 
         df_vehiculos = Gestion_Vehiculos()
         df_vehiculos = df_vehiculos.cargar_datos()[['id','placa','tipo_vehiculo']]
@@ -626,7 +629,23 @@ class Historiales:
         
         self.df_facturas = self.df_facturas.rename(columns={'id':'id_factura'})
         
-        self.df_facturas = self.df_facturas[['id_factura','placa','cedula','nombre','fecha_ingreso','hora_ingreso',
-                                             'subtotal','promocion','descuento','iva','total']]
+        self.df_facturas = self.df_facturas.merge(df_detalle_factura, how='left',
+                                                 left_on='id_factura', right_on='id_factura')
         
-        return self.df_facturas
+        df_front = self.df_facturas[['id_factura','placa','cedula','nombre','fecha_ingreso',
+                                     'hora_ingreso','subtotal','promocion','descuento','iva','total']].drop_duplicates()
+        
+        df_download = self.df_facturas[['id_factura','servicio','precio','realizado',]]
+        
+        return df_front, df_download
+    
+    def generar_excel_facturas(self, df1, df2):
+        output = BytesIO()
+        with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+            # Se genera una hoja para facturas
+            df1.to_excel(writer, index=False, sheet_name='Facturas')
+            
+            # Se genera una hoja para los detalles de las facturas
+            df2.to_excel(writer, index=False, sheet_name='Detalles Facturas')
+        output.seek(0)
+        return output
