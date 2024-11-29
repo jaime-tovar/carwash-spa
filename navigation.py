@@ -40,7 +40,6 @@ def make_sidebar():
                 st.page_link("pages/billing.py", label="Facturación", icon="💵")
                 st.page_link("pages/clients.py", label="Gestión Clientes", icon="👨🏻‍💼")
                 st.page_link("pages/vehicles.py", label="Gestión Vehículos", icon="🚘")
-                st.page_link("pages/reports.py", label="Reportes", icon="📋")
 
             st.write("")
             st.write("")
