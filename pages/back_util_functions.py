@@ -291,7 +291,7 @@ class Gestion_Servicios:
 
         return result_dict
     
-    def dataframe_temp_services(self, dict_elecciones):
+    def dataframe_temp_services(self, dict_elecciones, dict_custom=None):
         self.cargar_dataframe()
         
         df_detalle_factura = pd.read_csv(self.detalle_factura)
@@ -311,7 +311,38 @@ class Gestion_Servicios:
             on=['tipo_vehiculo', 'categoria', 'servicio'],
             how='inner'
         )
-        
+    
+        if dict_custom is not None:
+            df = pd.DataFrame([{
+                'id_vehiculo' : dict_elecciones['id_vehiculo'],
+                'placa' : dict_elecciones['placa'],
+                'tipo_vehiculo' : dict_elecciones['tipo_vehiculo'],
+                'categoria' : dict_elecciones['categoria'],
+                'id_cliente' : dict_elecciones['id_cliente'],
+                'cedula' : dict_elecciones['cedula'],
+                'servicio' : dict_custom['servicio'],
+                'precio_unitario' : dict_custom['precio_unitario'],
+                'metros' : dict_custom['metros']
+            }])
+            cols_to_explode = ['servicio', 'precio_unitario', 'metros']
+
+            # Calcular el máximo de la longitud de las listas en las columnas
+            max_len = max(df[cols_to_explode[0]].apply(len).max(), 
+                          df[cols_to_explode[1]].apply(len).max(), 
+                          df[cols_to_explode[2]].apply(len).max())
+
+            # Aseguramos que todas las listas tengan la misma longitud
+            for col in cols_to_explode:
+                df[col] = df[col].apply(lambda x: x + [None] * (max_len - len(x)))
+
+            # Expandimos todas las columnas seleccionadas simultáneamente
+            df = df.explode(cols_to_explode, ignore_index=True)
+            
+            df['precio'] = df['precio_unitario']*df['metros']
+            df['detalles_servicio'] = ''
+            
+            df = df[['id_vehiculo','placa','tipo_vehiculo','categoria','id_cliente','cedula','servicio','precio','detalles_servicio']]
+            
         servicios_no_encontrados = df_eleccion[~df_eleccion['servicio'].isin(df_merge_especifica['servicio'])]
         
         df_merge_general = pd.merge(
@@ -320,8 +351,11 @@ class Gestion_Servicios:
             on=['tipo_vehiculo', 'servicio'],
             how='inner'
         )
+        
         df_merge_general['categoria'] = 'General'
         df_final = pd.concat([df_merge_especifica, df_merge_general], ignore_index=True)
+        if dict_custom is not None:
+            df_final = pd.concat([df_final, df], ignore_index=True)
         df_final['id'] = range(id_max_detalle_factura, id_max_detalle_factura + len(df_final))
         df_final['precio'] = pd.to_numeric(df_final['precio'])
         df_final['precio_formateado'] = df_final['precio'].apply(lambda x: formatear_precio(int(x)))
@@ -487,7 +521,7 @@ class Billing:
         def formatear_precio(valor):
             return f"$ {valor:,.0f}"
         
-        self.df_detalle_factura['precio_formateado'] = self.df_detalle_factura['precio'].apply(lambda x: formatear_precio(int(x)))
+        self.df_detalle_factura['precio_formateado'] = self.df_detalle_factura['precio'].apply(lambda x: formatear_precio(float(x)))
         
         return self.df_detalle_factura
     
