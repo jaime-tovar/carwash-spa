@@ -213,6 +213,12 @@ class Gestion_Vehiculos:
         cc_dict = df[df['tipo_vehiculo'] == 'Moto']
         cc_dict = cc_dict.set_index('categoria')[['cc_min', 'cc_max']].apply(list, axis=1).to_dict()
         return cc_dict
+    
+    def listado_placas(self):
+        self.cargar_datos()
+        self.vehiculo_df['placa'] = self.vehiculo_df['placa']
+        dict_cc_placas = dict(zip(self.vehiculo_df['placa'], self.vehiculo_df['id']))
+        return dict_cc_placas
 
 class Gestion_Servicios:
     def __init__(self):  # Inicializamos el archivo donde se van a guardar los datos

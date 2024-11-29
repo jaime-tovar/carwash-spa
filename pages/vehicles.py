@@ -1,6 +1,6 @@
 from navigation import make_sidebar
 import streamlit as st
-from pages.back_util_functions import Gestion_Vehiculos, Gestion_Clientes
+from pages.back_util_functions import Gestion_Vehiculos, Gestion_Clientes, Historiales
 from time import sleep
     
 make_sidebar()
@@ -116,3 +116,26 @@ if "btn_editar_vehiculo" not in st.session_state:
             st.toast('Primero seleccione un registro')
         else:
             btn_editar_vehiculo(dict_vehiculo_values)
+
+
+st.header("Historial Vehiculos")
+col1, col2 = st.columns(2)
+placas = Gestion_Vehiculos()
+dict_placas = placas.listado_placas()
+id_vehiculo = col1.selectbox('Seleccione la Placa del vehiculo', options=dict_placas.keys())
+historial = Historiales()
+st.session_state.historial_vehiculos = historial.historial_vehiculos(str(dict_placas[id_vehiculo]))
+if st.session_state.historial_vehiculos.empty:
+    st.warning("Este Vehiculo no tiene historial")
+else:
+    servicios_instance = Historiales()
+    min_date, max_date = servicios_instance.min_max_date_vehiculo(st.session_state.historial_vehiculos)
+
+    d = col2.date_input(
+    "Seleccione el rango de fechas",
+        (min_date, max_date),
+        min_date,
+        max_date,
+        format="YYYY/MM/DD",
+    )
+    st.dataframe(st.session_state.historial_vehiculos, hide_index= True)
