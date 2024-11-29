@@ -5,6 +5,7 @@ from time import sleep
     
 make_sidebar()
 st.session_state.df_state = False
+st.session_state.validaciones_data = True
 
 if "input_text" not in st.session_state:
     st.session_state.input_text = ""
@@ -16,8 +17,7 @@ def update_text():
 def btn_editar_vehiculo(dict_values):
     left0, right0 = st.columns(2)
     placa = left0.text_input("Placa *", value=dict_values['placa'], disabled=True)
-    if placa and len(placa) != 6:
-        left0.warning('Ingrese una placa válida')
+    
     right0.write('')
     right0.write('')
     agree = right0.checkbox('Editar placa')   
@@ -25,13 +25,25 @@ def btn_editar_vehiculo(dict_values):
     dict_cc_nombre = dict_cc_nombre.listado_clientes()
     dict_cc_nombre_index = {key: idx for idx, key in enumerate(dict_cc_nombre.keys())}
     
+    left11, right11 = st.columns(2)
+    
+    if agree:
+        placa_ant = left11.text_input("Placa anterior", value=dict_values['placa'], disabled=True)
+        placa_nueva = right11.text_input("Placa nueva *", key="input_text", on_change=update_text)
+        if placa_nueva:
+            if len(placa_nueva) != 6:
+                st.warning('Ingrese una placa válida')
+                st.session_state.validaciones_data = False
+            vehiculo_placa = Gestion_Vehiculos()
+            if vehiculo_placa.existe_vehiculo(placa_nueva):
+                st.warning("Esta placa ya se encuentra en el sistema")
+                st.session_state.validaciones_data = False
+            else:
+                st.session_state.validaciones_data = True
+    
     propietario = st.selectbox("Reasignar propietario", dict_cc_nombre.keys(),
                                    index=dict_cc_nombre_index[f"{dict_values['cedula']} | {dict_values['nombre']}"])
     
-    if agree:
-        placa_ant = left0.text_input("Placa anterior", value=dict_values['placa'], disabled=True)
-        placa_nueva = right0.text_input("Placa nueva *")
-        
     vehiculos = Gestion_Vehiculos()
     dict_categorias = vehiculos.diccionario_tipos_vehiculos()
     left1, right1 = st.columns(2)

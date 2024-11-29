@@ -1,5 +1,5 @@
 id,placa,tipo_vehiculo,categoria,marca,modelo,cilindraje,propietario
-1,ABC111,Moto,Categoria 2,Yamaha,YZF-R3,321,1
+1,ABC123,Moto,Categoria 2,Yamaha,YZF-R3,321,1
 2,DEF456,Moto,Categoria 2,Honda,CB500F,471,2
 3,GHI789,Moto,Categoria 2,KTM,390 Adventure,373,3
 4,JKL012,Moto,Categoria 3,Suzuki,V-Strom 650,645,4
