@@ -552,12 +552,35 @@ class Historiales:
     def historial_clientes(self,id_cliente):
         self.cargar_dataframe()
         self.df_historial_cliente = self.df_facturas[self.df_facturas['id_cliente'] == id_cliente]
+
+        df_vehiculos = Gestion_Vehiculos()
+        df_vehiculos = df_vehiculos.cargar_datos()[['id','placa','tipo_vehiculo','categoria']]
+        df_vehiculos = df_vehiculos.rename(columns={'id':'id_vehiculo'})
+        
+        self.df_historial_cliente = self.df_historial_cliente.merge(df_vehiculos, how='left',
+                                                  left_on='id_vehiculo', right_on='id_vehiculo')
+        self.df_historial_cliente = self.df_historial_cliente[['id','placa','tipo_vehiculo','categoria','emision','fecha_ingreso','hora_ingreso','fecha_salida',
+                                             'hora_salida','metodo_pago',
+                                             'subtotal','promocion','descuento','iva','total']]
+        
         return self.df_historial_cliente
 
     def historial_vehiculos(self,id_vehiculo):
         self.cargar_dataframe()
         self.df_historial_vehiculo = self.df_facturas[self.df_facturas['id_vehiculo'] == id_vehiculo]
+        
+        df_clientes = Gestion_Clientes()
+        df_clientes = df_clientes.cargar_datos()[['id','cedula','nombre']]
+        df_clientes = df_clientes.rename(columns={'id':'id_cliente'})
+
+        self.df_historial_vehiculo = self.df_historial_vehiculo.merge(df_clientes, how='left',
+                                                  left_on='id_cliente', right_on='id_cliente')
+        self.df_historial_vehiculo = self.df_historial_vehiculo[['id','cedula','nombre','emision','fecha_ingreso','hora_ingreso','fecha_salida',
+                                             'hora_salida','metodo_pago',
+                                             'subtotal','promocion','descuento','iva','total']]
+    
         return self.df_historial_vehiculo
+    
     
     def min_max_date_clientes(self,df):
         filtro = df['emision'].notna() & (df['emision'] != '')

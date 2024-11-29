@@ -138,4 +138,4 @@ if st.session_state.role == 'admin':
             max_date,
             format="YYYY/MM/DD",
         )
-        st.dataframe(st.session_state.historial_vehiculos, hide_index= True)
+        st.dataframe(st.session_state.historial_vehiculos,hide_index= True)
