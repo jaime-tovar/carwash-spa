@@ -539,6 +539,49 @@ class Billing:
 
         self.df_facturas.to_csv(path_or_buf=self.facturas, sep=",", index=False)
 
+    def reporte_facturas_detalles(self, dict_in):
+        self.df_facturas = self.crear_dataframe(facturas=True)
+        self.df_detalle_factura = self.crear_dataframe(detalles_facturas=True)
+        filtro = self.df_facturas['emision'].notna() & (self.df_facturas['emision'] != '')
+        self.df_facturas = self.df_facturas[filtro]
+        
+        df_vehiculos = Gestion_Vehiculos()
+        df_vehiculos = df_vehiculos.cargar_datos()[['id','placa','tipo_vehiculo','categoria']]
+        df_vehiculos = df_vehiculos.rename(columns={'id':'id_vehiculo'})
+        
+        df_clientes = Gestion_Clientes()
+        df_clientes = df_clientes.cargar_datos()[['id','cedula','nombre']]
+        df_clientes = df_clientes.rename(columns={'id':'id_cliente'})
+        
+        self.df_facturas = self.df_facturas.merge(df_vehiculos, how='left',
+                                                  left_on='id_vehiculo', right_on='id_vehiculo')
+        self.df_facturas = self.df_facturas.merge(df_clientes, how='left',
+                                                  left_on='id_cliente', right_on='id_cliente')
+        
+        self.df_facturas = self.df_facturas.rename(columns={'id':'id_factura', 'emision':'fecha_emision'})
+        
+        df_final = self.df_facturas.merge(self.df_detalle_factura, how='left',
+                                          left_on='id_factura', right_on='id_factura')
+        
+        df_final = df_final[(df_final['fecha_emision'] >= dict_in['fecha_min']) & (df_final['fecha_emision'] <= dict_in['fecha_max'])]
+        
+        if dict_in['tipo_vehiculo'] != 'Todos':
+            df_final = df_final[df_final['tipo_vehiculo'] == dict_in['tipo_vehiculo']]
+            
+        if dict_in['servicio'] != 'Todos':
+            df_final = df_final[df_final['servicio'] == dict_in['servicio']]
+        
+        if dict_in['metodo_pago'] != 'Todos':
+            df_final = df_final[df_final['metodo_pago'] == dict_in['metodo_pago']]
+        
+        df_front = df_final[['id_factura','fecha_emision','placa','tipo_vehiculo','categoria','cedula','nombre',
+                             'fecha_ingreso', 'hora_ingreso', 'fecha_salida', 'hora_salida',
+                             'subtotal','descuento','iva','total']].drop_duplicates()
+        
+        df_download = df_final[['id_factura','servicio','precio','realizado']]
+        
+        return df_front, df_download
+    
 class Historiales:
     def __init__(self):
         self.facturas = 'pages/data/facturas.csv'
@@ -635,7 +678,7 @@ class Historiales:
         df_front = self.df_facturas[['id_factura','placa','cedula','nombre','fecha_ingreso',
                                      'hora_ingreso','subtotal','promocion','descuento','iva','total']].drop_duplicates()
         
-        df_download = self.df_facturas[['id_factura','servicio','precio','realizado',]]
+        df_download = self.df_facturas[['id_factura','servicio','precio','realizado']]
         
         return df_front, df_download
     
