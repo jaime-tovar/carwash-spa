@@ -536,6 +536,7 @@ class Billing:
         # Convertir los campos numéricos a su tipo correspondiente
         self.df_facturas[["subtotal", "descuento", "iva", "total"]] = self.df_facturas[["subtotal", "descuento", "iva", "total"]].astype(float)
         
+
         self.df_facturas.to_csv(path_or_buf=self.facturas, sep=",", index=False)
 
 class Historiales:
@@ -602,3 +603,30 @@ class Historiales:
         min_date = datetime.datetime.strptime(str(df['emision'].min()), '%Y-%m-%d').date()
         max_date = datetime.datetime.strptime(str(df['emision'].max()), '%Y-%m-%d').date()
         return min_date, max_date
+    
+    def emision_actual(self):
+        df = self.cargar_dataframe()[0]
+        df['emision'] = pd.to_datetime(df['emision'])
+        fecha_actual = datetime.datetime.now().date()
+        filtro = df['emision'].dt.date == fecha_actual
+        self.df_facturas = self.df_facturas[filtro]
+
+        df_vehiculos = Gestion_Vehiculos()
+        df_vehiculos = df_vehiculos.cargar_datos()[['id','placa','tipo_vehiculo']]
+        df_vehiculos = df_vehiculos.rename(columns={'id':'id_vehiculo'})
+        
+        df_clientes = Gestion_Clientes()
+        df_clientes = df_clientes.cargar_datos()[['id','cedula','nombre']]
+        df_clientes = df_clientes.rename(columns={'id':'id_cliente'})
+        
+        self.df_facturas = self.df_facturas.merge(df_vehiculos, how='left',
+                                                  left_on='id_vehiculo', right_on='id_vehiculo')
+        self.df_facturas = self.df_facturas.merge(df_clientes, how='left',
+                                                  left_on='id_cliente', right_on='id_cliente')
+        
+        self.df_facturas = self.df_facturas.rename(columns={'id':'id_factura'})
+        
+        self.df_facturas = self.df_facturas[['id_factura','placa','cedula','nombre','fecha_ingreso','hora_ingreso',
+                                             'subtotal','promocion','descuento','iva','total']]
+        
+        return self.df_facturas

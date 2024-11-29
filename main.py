@@ -4,6 +4,17 @@ from navigation import make_sidebar
 from pages.front_util_functions import validate_user
 import os
 import json
+import webbrowser
+
+pdf_path = "pages/data/manual.pdf"
+
+def abrir_pdf():
+    ruta_absoluta = os.path.abspath(pdf_path)
+    webbrowser.open_new(f"file://{ruta_absoluta}")
+
+if st.button("ℹ"):
+    abrir_pdf()
+
 
 left, right = st.columns(2)
 

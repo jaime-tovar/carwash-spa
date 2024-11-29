@@ -2,10 +2,11 @@ from navigation import make_sidebar
 import streamlit as st
 from datetime import datetime
 from time import sleep
-from pages.back_util_functions import Billing
+from pages.back_util_functions import Billing,Historiales
 
 make_sidebar()
 
+st.session_state.df_state_reporte_diario = False
 st.session_state.df_state_facturas = False
 st.session_state.df_state_detalle_factura = False
 st.session_state.validaciones_data = True
@@ -127,7 +128,6 @@ if not st.session_state.df_state_facturas:
 if st.session_state.df_facturas_activas.empty:
     st.warning('No hay facturas activas en este momento')
 else:
-
     event_facturas_activas = st.dataframe(
         st.session_state.df_facturas_activas,
         key="facturas_activas",
@@ -172,3 +172,33 @@ else:
                 st.toast('Primero seleccione un registro')
             else:
                 btn_facturar(facturas_activas_selection)
+
+
+if not st.session_state.df_state_reporte_diario:
+    reporte = Historiales()
+    st.session_state.df_reporte_diario = reporte.emision_actual()
+    st.session_state.df_state_reporte_diario = True
+if st.session_state.df_reporte_diario.empty:
+        st.warning("El dia de aun no se han hecho facturas")
+else:
+    st.header("Reportes diario")
+    event_reporte_diario = st.dataframe(
+        st.session_state.df_reporte_diario,
+        key="id",
+        on_select="rerun",
+        selection_mode=['single-row'],
+        column_config={
+            "id_factura": st.column_config.TextColumn("ID", default="st."),
+            "placa": st.column_config.TextColumn("Placa", default="st."),
+            "cedula": st.column_config.TextColumn("Cedula", default="st."),
+            "nombre": st.column_config.TextColumn("Nombre", default="st."),
+            "fecha_ingreso": st.column_config.TextColumn("Fecha Ingreso", default="st."),
+            "hora_ingreso": st.column_config.TextColumn("Hora Ingreso", default="st."),
+            "subtotal": st.column_config.TextColumn("Subtotal", default="st."),
+            "promocion": st.column_config.TextColumn("Promocion", default="st."),
+            "descuento": st.column_config.TextColumn("Descuento", default="st."),
+            "iva": st.column_config.TextColumn("Iva 19%", default="st."),
+            "total": st.column_config.TextColumn("Total", default="st.")
+        },
+        hide_index= True
+    )

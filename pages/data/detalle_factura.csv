@@ -18,3 +18,8 @@ id,id_factura,servicio,precio,realizado
 17,7,Restauración de mofle negro,80000,False
 18,8,Lavada Sencilla,33000,True
 19,8,Restauración de mofle cromada,120000,True
+20,9,Lavada Completa,43000,True
+21,9,Polichada,80000,True
+22,10,Lavada FULL,45000,True
+23,10,Mantenimiento aire acondicionado,100000,True
+24,10,Polarizado,200000,True
