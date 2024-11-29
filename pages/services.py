@@ -14,13 +14,16 @@ def btn_agregar():
     left0, right0 = st.columns(2)
     servicio = left0.text_input("Servicio *")
     precio = right0.number_input("Precio *", step=1000, format='%d', min_value=0)
+    
     vehiculos = Gestion_Vehiculos()
     dict_categorias = vehiculos.diccionario_tipos_vehiculos()
     left1, right1 = st.columns(2)
+
     tipo_vehiculo = left1.selectbox("Categoria *", dict_categorias.keys())
     categoria = right1.selectbox('Tipo *', dict_categorias[tipo_vehiculo])
     detalle = st.text_area("Detalles del Servicio")
     st.write('\* Campos obligatorios')
+    
     if st.button("Guardar", key=123):
         if st.session_state.validaciones_data:
             servicios = Gestion_Servicios()
@@ -33,18 +36,36 @@ def btn_agregar():
 
 @st.dialog("Editar servicio")
 def btn_editar(dict_values):
-    cedula = st.text_input("Cédula", value=dict_values['cedula'], disabled=True)
-    nombre = st.text_input("Nombre *", value=dict_values['nombre'])
-    telefono = st.text_input("Teléfono *", value=dict_values['telefono'])
-    fecha_nacimiento = st.date_input("Fecha Nacimiento", value=dict_values['fecha_nacimiento'])
-    email = st.text_input("Correo Electrónico", value=dict_values['email'])
+    left0, right0 = st.columns(2)
+    servicio = left0.text_input("Servicio *", value=dict_values['servicio'], disabled=True)
+    precio = right0.number_input("Precio *", step=1000, format='%d', min_value=0,
+                                 value=dict_values['precio'])
+    vehiculos = Gestion_Vehiculos()
+    dict_categorias = vehiculos.diccionario_tipos_vehiculos()
+    left1, right1 = st.columns(2)
+    
+    tipo_vehiculo = left1.selectbox("Categoria *", dict_categorias.keys(),
+                                    index=list(dict_categorias.keys()).index(dict_values['tipo_vehiculo']),
+                                    disabled=True)
+    
+    dict_categoria_index = {key: idx for idx, key in enumerate(dict_categorias[tipo_vehiculo])}
+    
+    categoria = right1.selectbox('Tipo *', dict_categorias[tipo_vehiculo],
+                                 index=dict_categoria_index[dict_values['categoria']],
+                                 disabled=True)
+    
+    detalle = st.text_area("Detalles del Servicio", value=dict_values['detalles'])
     st.write('\* Campos obligatorios')
-    if st.button("Guardar", key=5):
-        cliente = Gestion_Clientes()
-        cliente.editar_cliente(dict_values['id'] ,str(cedula), nombre, telefono, fecha_nacimiento, email)
-        st.success("Se ha actualizado exitosamente datos del cliente")
-        sleep(1)
-        st.rerun()
+    
+    if st.button("Guardar", key=123):
+        if st.session_state.validaciones_data:
+            servicios = Gestion_Servicios()
+            servicios.editar_servicio(dict_values['id'], servicio, precio, tipo_vehiculo, categoria, detalle)
+            st.success("Servicio editado existosamente")
+            sleep(1)
+            st.rerun()
+        else:
+            st.error('Datos incorrectos')
 
 st.header('Administración de Servicios')
 
@@ -74,3 +95,19 @@ event_servicios = st.dataframe(
     },
     height= 250
 )
+
+try:
+    dict_services_values = {
+        'id' : event_servicios.selection.rows[0]+1,
+        'servicio' : str(st.session_state.df_servicios.iloc[event_servicios.selection.rows].iat[0, 0]),
+        'precio' : int(st.session_state.df_servicios.iloc[event_servicios.selection.rows].iat[0, 1]),
+        'tipo_vehiculo' : str(st.session_state.df_servicios.iloc[event_servicios.selection.rows].iat[0, 2]),
+        'categoria' : str(st.session_state.df_servicios.iloc[event_servicios.selection.rows].iat[0, 3]),
+        'detalles' : str(st.session_state.df_servicios.iloc[event_servicios.selection.rows].iat[0, 4])
+    }
+except IndexError:
+    dict_services_values = None
+
+if "btn_editar" not in st.session_state:
+    if middle.button("Editar", key=1234):
+        btn_editar(dict_services_values)

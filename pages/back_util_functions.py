@@ -269,6 +269,14 @@ class Gestion_Servicios:
         
         self.cargar_a_csv()
     
+    def editar_servicio(self, id, servicio, precio, tipo_vehiculo, categoria, detalles):
+        self.cargar_dataframe()
+        if id in self.service_df.index:
+            self.service_df.loc[id, ['servicio', 'precio', 'tipo_vehiculo', 'categoria', 'detalles_servicio']] = [
+                servicio, precio, tipo_vehiculo, categoria, detalles
+            ]
+        self.cargar_a_csv()
+    
     def diccionario_precios_categoria(self):
         df = self.cargar_dataframe()
 

@@ -1,39 +1,39 @@
 id,servicio,precio,tipo_vehiculo,categoria,detalles_servicio
-1,Lavada Sencilla,28000,Moto,Categoria 1,
-2,Lavada Sencilla,33000,Moto,Categoria 2,
-3,Lavada Sencilla,38000,Moto,Categoria 3,
-4,Lavada Sencilla,42000,Moto,Categoria 4,
-5,Lavada Completa,33000,Moto,Categoria 1,
-6,Lavada Completa,38000,Moto,Categoria 2,
-7,Lavada Completa,43000,Moto,Categoria 3,
-8,Lavada Completa,47000,Moto,Categoria 4,
-9,Recubrimiento ceramico,170000,Moto,Categoria 1,
-10,Recubrimiento ceramico,170000,Moto,Categoria 2,
-11,Recubrimiento ceramico,300000,Moto,Categoria 3,
-12,Recubrimiento ceramico,300000,Moto,Categoria 4,
-13,Polichada,80000,Moto,General,
-14,Restauración de mofle cromada,120000,Moto,General,
-15,Restauración de mofle negro,80000,Moto,General,
-16,Lavada Sencilla,35000,Carro,Liviano,
-17,Lavada Sencilla,40000,Carro,SUB-V/CV,
-18,Lavada Sencilla,45000,Carro,Coupé/Alto rendimiento,
-19,Lavada Sencilla,50000,Carro,Pesados,
-20,Lavada Completa,40000,Carro,Liviano,
-21,Lavada Completa,45000,Carro,SUB-V/CV,
-22,Lavada Completa,50000,Carro,Coupé/Alto rendimiento,
-23,Lavada Completa,55000,Carro,Pesados,
-24,Lavada FULL,45000,Carro,Liviano,
-25,Lavada FULL,50000,Carro,SUB-V/CV,
-26,Lavada FULL,55000,Carro,Coupé/Alto rendimiento,
-27,Lavada FULL,60000,Carro,Pesados,
-28,Lavada de motor,30000,Carro,Liviano,
-29,Lavada de motor,35000,Carro,SUB-V/CV,
-30,Lavada de motor,40000,Carro,Coupé/Alto rendimiento,
-31,Lavada de motor,45000,Carro,Pesados,
-32,Mantenimiento aire acondicionado,100000,Carro,General,
-33,Eliminacion de olores,80000,Carro,General,
-34,Vinilos decorativos,400000,Carro,Liviano,
-35,Vinilos decorativos,500000,Carro,SUB-V/CV,
-36,Vinilos decorativos,400000,Carro,Coupé/Alto rendimiento,
-37,Polarizado,200000,Carro,General,
-38,Polichada,60000,Carro,General,
+1,Lavada Sencilla,20000,Moto,Categoria 1,"Lavada con shampoo, superficial y secadora"
+2,Lavada Sencilla,33000,Moto,Categoria 2,nan
+3,Lavada Sencilla,38000,Moto,Categoria 3,nan
+4,Lavada Sencilla,42000,Moto,Categoria 4,nan
+5,Lavada Completa,33000,Moto,Categoria 1,nan
+6,Lavada Completa,38000,Moto,Categoria 2,nan
+7,Lavada Completa,43000,Moto,Categoria 3,nan
+8,Lavada Completa,47000,Moto,Categoria 4,nan
+9,Recubrimiento ceramico,170000,Moto,Categoria 1,nan
+10,Recubrimiento ceramico,170000,Moto,Categoria 2,nan
+11,Recubrimiento ceramico,300000,Moto,Categoria 3,nan
+12,Recubrimiento ceramico,300000,Moto,Categoria 4,nan
+13,Polichada,80000,Moto,General,nan
+14,Restauración de mofle cromada,120000,Moto,General,nan
+15,Restauración de mofle negro,80000,Moto,General,nan
+16,Lavada Sencilla,35000,Carro,Liviano,nan
+17,Lavada Sencilla,40000,Carro,SUB-V/CV,nan
+18,Lavada Sencilla,45000,Carro,Coupé/Alto Rendimiento,nan
+19,Lavada Sencilla,50000,Carro,Pesados,nan
+20,Lavada Completa,40000,Carro,Liviano,nan
+21,Lavada Completa,45000,Carro,SUB-V/CV,nan
+22,Lavada Completa,50000,Carro,Coupé/Alto Rendimiento,nan
+23,Lavada Completa,55000,Carro,Pesados,nan
+24,Lavada FULL,45000,Carro,Liviano,nan
+25,Lavada FULL,50000,Carro,SUB-V/CV,nan
+26,Lavada FULL,55000,Carro,Coupé/Alto Rendimiento,nan
+27,Lavada FULL,60000,Carro,Pesados,nan
+28,Lavada de motor,30000,Carro,Liviano,nan
+29,Lavada de motor,35000,Carro,SUB-V/CV,nan
+30,Lavada de motor,40000,Carro,Coupé/Alto Rendimiento,nan
+31,Lavada de motor,45000,Carro,Pesados,nan
+32,Mantenimiento aire acondicionado,100000,Carro,General,nan
+33,Eliminacion de olores,80000,Carro,General,nan
+34,Vinilos decorativos,400000,Carro,Liviano,nan
+35,Vinilos decorativos,500000,Carro,SUB-V/CV,nan
+36,Vinilos decorativos,400000,Carro,Coupé/Alto Rendimiento,nan
+37,Polarizado,200000,Carro,General,nan
+38,Polichada,60000,Carro,General,nan
