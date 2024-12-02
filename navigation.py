@@ -34,6 +34,7 @@ def make_sidebar():
                 st.page_link("pages/services.py", label="Gestión Servicios", icon="📦")
                 st.page_link("pages/reports.py", label="Reportes", icon="📋")
                 st.page_link("pages/config.py", label="Configuraciones", icon="🛠️")
+                st.page_link("pages/carousel.py", label="Imagenes", icon="📖")
 
             if st.session_state.role == 'usuario':
                 st.page_link("pages/principal.py", label="Principal", icon="🏠")
